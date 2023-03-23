@@ -2,7 +2,7 @@
 Welcome to Tech Store, an online store built with React that allows users to browse and purchase products. With Tech Store, you can easily add items to your cart, adjust the quantity of items, and remove items from your cart.
 
 ### Getting Started
-To get started with Tech Store, simply visit the following link: (https://elegant-crumble-e1edbe.netlify.app/)
+To get started with Tech Store, simply visit the following link: (https://techstoreaashu.netlify.app)
 
 ### Prerequisites
 In order to use Tech Store, you'll need to have a modern web browser such as Chrome, Firefox, or Safari.
