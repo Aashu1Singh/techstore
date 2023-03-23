@@ -1,4 +1,4 @@
-# [Tech Store] (https://elegant-crumble-e1edbe.netlify.app/)
+# [Tech Store] 
 Welcome to Tech Store, an online store built with React that allows users to browse and purchase products. With Tech Store, you can easily add items to your cart, adjust the quantity of items, and remove items from your cart.
 
 ### Getting Started
