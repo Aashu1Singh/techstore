@@ -37,6 +37,7 @@ const HeroSection = ({ myData }) => {
 
 const Wrapper = styled.section`
   padding: 12rem 0;
+  padding-bottom: 11%;
   background-color: #849531;
 
   img {

@@ -131,7 +131,6 @@ const Nav = () => {
         transition: all 3s linear;
       }
 
-
       .active .navbar-lists {
         visibility: visible;
         opacity: 1;
@@ -176,7 +175,8 @@ const Nav = () => {
             <NavLink
               to="/"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => setMenuIcon(false)}
+            >
               Home
             </NavLink>
           </li>
@@ -184,7 +184,8 @@ const Nav = () => {
             <NavLink
               to="/about"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => setMenuIcon(false)}
+            >
               About
             </NavLink>
           </li>
@@ -192,7 +193,8 @@ const Nav = () => {
             <NavLink
               to="/products"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => setMenuIcon(false)}
+            >
               Products
             </NavLink>
           </li>
@@ -200,17 +202,29 @@ const Nav = () => {
             <NavLink
               to="/contact"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => setMenuIcon(false)}
+            >
               Contact
             </NavLink>
           </li>
 
-          {isAuthenticated && <p>{user.name}</p>}
+          {isAuthenticated && (
+            <li>
+              <NavLink
+                to="/"
+                className="navbar-link "
+                onClick={() => setMenuIcon(false)}
+              >
+                {user.name}
+              </NavLink>
+            </li>
+          )}
 
           {isAuthenticated ? (
             <li>
               <Button
-                onClick={() => logout({ returnTo: window.location.origin })}>
+                onClick={() => logout({ returnTo: window.location.origin })}
+              >
                 Log Out
               </Button>
             </li>
