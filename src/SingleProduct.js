@@ -29,6 +29,7 @@ const SingleProduct = () => {
     stock,
     stars,
     reviews,
+    
     image,
   } = singleProduct;
 
