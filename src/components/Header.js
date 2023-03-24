@@ -17,13 +17,15 @@ const Header = () => {
 
 const MainHeader = styled.header`
   padding: 0 4.8rem;
-  height: 10rem;
-  background-color: #849531;
+  height: 8rem;
+  background-color: #25274D;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  color: #fff
+  color: #fff;
+  width: 100%;
+  position: fixed;
+  z-index: 3;
 
   .logo {
     height: 5rem;

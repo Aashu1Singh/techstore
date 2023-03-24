@@ -46,7 +46,7 @@ const Cart = () => {
         <hr />
         <div className="cart-two-button">
           <NavLink to="/products">
-            <Button> continue Shopping </Button>
+            <Button style={{backgroundColor : "#25274D", color: "#fff"}}> continue Shopping </Button>
           </NavLink>
           <Button className="btn btn-clear" onClick={clearCart}>
             clear cart
@@ -87,6 +87,7 @@ const EmptyDiv = styled.div`
   place-items: center;
   height: 50vh;
   background-color: ${({ theme }) => theme.colors.bg};
+  padding-top: 8rem;
 
   h3 {
     font-size: 4.2rem;
@@ -96,7 +97,7 @@ const EmptyDiv = styled.div`
 `;
 
 const Wrapper = styled.section`
-  padding: 9rem 0;
+  padding-top: 16rem;
 
   .grid-four-column {
     grid-template-columns: repeat(4, 1fr);

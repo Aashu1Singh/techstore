@@ -49,7 +49,7 @@ const AddToCart = ({ product }) => {
       />
 
       <NavLink to="/cart" onClick={() => addToCart(id, color, amount, product)}>
-        <Button className="btn">Add To Cart</Button>
+        <Button className="btn" style={{backgroundColor : "#25274D", color: "#fff"}}>Add To Cart</Button>
       </NavLink>
     </Wrapper>
   );

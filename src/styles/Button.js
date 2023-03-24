@@ -14,6 +14,9 @@ export const Button = styled.button`
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
+  background-color: white;
+  color: #25274D;
+  border-radius: 4%
 
   &:hover,
   &:active {

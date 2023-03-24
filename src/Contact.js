@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const Contact = () => {
   const { isAuthenticated, user } = useAuth0();
+ 
 
   const Wrapper = styled.section`
     padding: 9rem 0 5rem 0;
@@ -55,7 +56,7 @@ const Contact = () => {
       <div className="container">
         <div className="contact-form">
           <form
-            action="https://formspree.io/f/xeqdgwnq"
+            action="https://formspree.io/f/myyadbbo"
             method="POST"
             className="contact-inputs"
           >
