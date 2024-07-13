@@ -10,7 +10,7 @@ import { MdSecurity } from "react-icons/md";
 import { TbTruckDelivery, TbReplace } from "react-icons/tb";
 import Star from "./components/Star";
 import AddToCart from "./components/AddToCart";
-import { Space, Spin } from "antd";
+import {  Spin } from "antd";
 
 const API = "https://api.pujakaitem.com/api/products";
 
@@ -20,6 +20,7 @@ const SingleProduct = () => {
 
   const { id } = useParams();
 
+  
   const {
     id: alias,
     name,
