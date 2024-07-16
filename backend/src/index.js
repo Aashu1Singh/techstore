@@ -1,5 +1,5 @@
 const app = require("./app");
 
-app.listen(5000, () => {
-  console.log("Server started on 5000");
+app.listen(process.env.PORT || 8000, () => {
+  console.log(`Server started on ${process.env.PORT || 8000}`);
 });
