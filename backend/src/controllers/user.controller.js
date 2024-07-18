@@ -85,7 +85,7 @@ const loginUser = (req, response) => {
 };
 
 const getUser = (req, res) => {
-  console.log(req.query);
+  console.log(req.user);
 
   res.send();
 };
