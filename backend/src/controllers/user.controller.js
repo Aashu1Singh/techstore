@@ -61,7 +61,8 @@ const loginUser = (req, response) => {
         let verifyUser = bcrypt.compareSync(password, result[0].password);
 
         if (verifyUser) {
-          let verifiedUser = { ...result[0] };
+          let verifiedUser = { user_id: result[0].user_id };
+
           console.log(verifiedUser);
 
           const accessToken = jwt.sign(verifiedUser, "secret", {
@@ -87,7 +88,27 @@ const loginUser = (req, response) => {
 const getUser = (req, res) => {
   console.log(req.user);
 
-  res.send();
+  const queryString =
+    "SELECT user_id, first_name, last_name, email, access_token from user WHERE user_id = ?";
+  const value = [req.user?.user_id];
+
+  connection.connect((err) => {
+    if (err) throw err;
+
+    connection.query(queryString, [value], (err, result) => {
+      if (err) throw err;
+
+      let user  = {
+        user_id:  result[0].user_id,
+        Name:  result[0].first_name + result[0].last_name,
+        email: result[0].email,
+        access_token: result[0].access_token,
+      }
+
+      console.log(user);
+      res.status(200).json(user);
+    });
+  });
 };
 
 module.exports = {
