@@ -8,7 +8,7 @@ const GridView = ({ products }) => {
       <div className="container grid grid-three-column">
         {products.map((curElem, index) => {
           // console.log(index)
-          return <Product key={curElem.id} {...curElem} />;
+          return <Product key={curElem.prod_id} {...curElem} />;
         })}
       </div>
     </Wrapper>

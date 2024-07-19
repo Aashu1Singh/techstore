@@ -9,9 +9,9 @@ import { useCartContext } from "../context/cart_context";
 const AddToCart = ({ product }) => {
   const { addToCart } = useCartContext();
 
-  const { id, colors, stock } = product;
+  const { prod_id, colors, stock } = product;
 
-  const [color, setColor] = useState(colors[0]);
+  const [color, setColor] = useState(colors ? colors[0] : []);
   const [amount, setAmount] = useState(1);
 
   const setDecrease = () => {
@@ -27,7 +27,7 @@ const AddToCart = ({ product }) => {
       <div className="colors">
         <p>
           Color:
-          {colors.map((curColor, index) => {
+          {colors && colors.map((curColor, index) => {
             return (
               <button
                 key={index}
@@ -48,7 +48,7 @@ const AddToCart = ({ product }) => {
         setIncrease={setIncrease}
       />
 
-      <NavLink to="/cart" onClick={() => addToCart(id, color, amount, product)}>
+      <NavLink to="/cart" onClick={() => addToCart(prod_id, color, amount, product)}>
         <Button className="btn" style={{backgroundColor : "#25274D", color: "#fff"}}>Add To Cart</Button>
       </NavLink>
     </Wrapper>

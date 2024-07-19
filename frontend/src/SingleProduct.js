@@ -33,9 +33,10 @@ const SingleProduct = () => {
 
     image,
   } = singleProduct;
+  console.log(singleProduct);
 
   useEffect(() => {
-    getSingleProduct(`${API}?id=${id}`);
+    getSingleProduct(id);
   }, []);
 
   if (isSingleLoading) {
