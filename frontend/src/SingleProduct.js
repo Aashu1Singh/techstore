@@ -10,9 +10,10 @@ import { MdSecurity } from "react-icons/md";
 import { TbTruckDelivery, TbReplace } from "react-icons/tb";
 import Star from "./components/Star";
 import AddToCart from "./components/AddToCart";
-import {  Spin } from "antd";
+import { Spin } from "antd";
+import { API } from "./utils/Constant";
 
-const API = "https://api.pujakaitem.com/api/products";
+// const API = "https://api.pujakaitem.com/api/products";
 
 const SingleProduct = () => {
   const { getSingleProduct, isSingleLoading, singleProduct } =
@@ -20,7 +21,6 @@ const SingleProduct = () => {
 
   const { id } = useParams();
 
-  
   const {
     id: alias,
     name,
@@ -30,7 +30,7 @@ const SingleProduct = () => {
     stock,
     stars,
     reviews,
-    
+
     image,
   } = singleProduct;
 
@@ -40,7 +40,7 @@ const SingleProduct = () => {
 
   if (isSingleLoading) {
     return (
-      <div style={{ width: "5%", margin: "0 auto" , marginTop: "4%"}}>
+      <div style={{ width: "5%", margin: "0 auto", marginTop: "4%" }}>
         <Spin size="large" />
       </div>
     );

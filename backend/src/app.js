@@ -1,9 +1,16 @@
-const express = require("express");
-const bodyParser = require('body-parser')
 require('dotenv').config()
+const express = require("express");
+const cors = require("cors")
+
 
 
 const app = express();
+
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+}))
+
 app.use(express.json({ limit: "16kb" }));
 
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
