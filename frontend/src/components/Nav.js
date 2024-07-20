@@ -231,7 +231,12 @@ const Nav = () => {
             </li>
           ) : (
             <li>
-              <Button onClick={() => loginWithRedirect()}>Log In</Button>
+              <NavLink to="/login">
+                <Button onClick={() => loginWithRedirect()}>Log In</Button>
+              </NavLink>
+              <NavLink to="/signup">
+                <Button onClick={() => loginWithRedirect()}>Sign UP</Button>
+              </NavLink>
             </li>
           )}
 
