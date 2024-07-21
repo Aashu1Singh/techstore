@@ -3,7 +3,7 @@ const connection = require("../db/db");
 const jwt = require("jsonwebtoken");
 
 async function addNewUser(req, res) {
-  const { email, password, firstname, lastname } = req.body;
+  const { email, password, fullname } = req.body;
 
   if (!email || !password) {
     return res.status(400).json("Email and Password are required");
@@ -16,24 +16,23 @@ async function addNewUser(req, res) {
 
     if (result.length > 0) {
       console.log(result);
-      res.status(200).json("User already exists with this email");
+      res.status(400).json("User already exists with this email");
 
       return;
     } else {
       // console.table([firstname, lastname, email, password]);
       let passwordHash = await bcrypt.hash(password, 8);
 
-      queryString =
-        "INSERT into user ( first_name, last_name, email, password) values (?);";
+      queryString = "INSERT into user ( fullname, email, password) values (?);";
 
-      values = [firstname, lastname, email, passwordHash];
+      values = [fullname, email, passwordHash];
 
       connection.query(queryString, [values], (err, rows) => {
         if (err) {
           console.log(err);
         }
 
-        console.log(rows);
+        // console.log(rows);
         res.status(200).json("User added");
         return;
       });
@@ -48,30 +47,42 @@ const loginUser = (req, response) => {
   let value = [email];
 
   connection.query(queryString, [value], (err, result) => {
-    if (err) throw new err();
+    if (err) throw err;
+    console.log(result);
 
-    if (result.length == 1) {
-      let verifyUser = bcrypt.compareSync(password, result[0].password);
+    if (result.length === 0) {
+      return response
+        .status(404)
+        .json({ message: "User doesn't exist with this email" });
 
-      if (verifyUser) {
-        let verifiedUser = { user_id: result[0].user_id };
+      // return;
+    }
+    console.log("after return");
+    let verifyUser = bcrypt.compareSync(password, result[0].password);
 
-        console.log(verifiedUser);
+    if (verifyUser) {
+      let verifiedUser = { user_id: result[0].user_id };
 
-        const accessToken = jwt.sign(verifiedUser, "secret", {
-          expiresIn: "1h",
+      console.log(verifiedUser);
+
+      const accessToken = jwt.sign(verifiedUser, "secret", {
+        expiresIn: "1h",
+      });
+
+      let updateQuery = "UPDATE user SET access_token = ? WHERE user_id = ?;";
+      let updateValues = [accessToken, verifiedUser.user_id];
+
+      connection.query(updateQuery, updateValues, (err, res) => {
+        console.log(err);
+        if (err) throw new Error(err);
+
+        response.status(200).json({
+          message: "Logged In ",
+          accessToken: accessToken,
         });
-
-        let updateQuery = "UPDATE user SET access_token = ? WHERE user_id = ?;";
-        let updateValues = [accessToken, verifiedUser.user_id];
-
-        connection.query(updateQuery, updateValues, (err, res) => {
-          console.log(err);
-          if (err) throw new Error(err);
-
-          response.status(200).json({ accessToken });
-        });
-      }
+      });
+    } else {
+      response.status(401).json({ message: "Wrong Password" });
     }
   });
 };
@@ -88,7 +99,7 @@ const getUser = (req, res) => {
 
     let user = {
       user_id: result[0].user_id,
-      Name: result[0].first_name + result[0].last_name,
+      fullname: result[0].fullname,
       email: result[0].email,
       access_token: result[0].access_token,
     };

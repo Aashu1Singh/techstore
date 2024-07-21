@@ -6,24 +6,13 @@ import { AppProvider } from "./context/productcontex";
 import { FilterContextProvider } from "./context/filter_context";
 import { CartProvider } from "./context/cart_context";
 
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  Router,
-  RouterProvider,
-  Routes,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import About from "./About";
 import Contact from "./Contact";
-import Products from "./Products";
-import SingleProduct from "./SingleProduct";
-import Cart from "./Cart";
-import ErrorPage from "./ErrorPage";
 import { Login } from "./components/Login";
 import { SignUp } from "./components/SignUp";
+import { UserProvider } from "./context/user_context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -82,7 +71,9 @@ root.render(
   <AppProvider>
     <FilterContextProvider>
       <CartProvider>
-        <RouterProvider router={router} />
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
       </CartProvider>
     </FilterContextProvider>
   </AppProvider>

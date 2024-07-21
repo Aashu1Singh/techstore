@@ -13,7 +13,6 @@ import AddToCart from "./components/AddToCart";
 import { Spin } from "antd";
 import { API } from "./utils/Constant";
 
-// const API = "https://api.pujakaitem.com/api/products";
 
 const SingleProduct = () => {
   const { getSingleProduct, isSingleLoading, singleProduct } =

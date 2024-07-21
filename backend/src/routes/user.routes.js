@@ -14,8 +14,8 @@ userRouter.get("/", (req, res) => {
   res.send("ok");
 });
 
-userRouter.route("/signup").get(addNewUser);
-userRouter.route("/login").get(loginUser);
+userRouter.route("/signup").post(addNewUser);
+userRouter.route("/login").post(loginUser);
 
 // /secured routes
 

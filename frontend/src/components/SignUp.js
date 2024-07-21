@@ -4,8 +4,13 @@ import styled from "styled-components";
 import Person2Icon from "@mui/icons-material/Person2";
 import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
+import { Formik } from "formik";
+import { useUserContext } from "../context/user_context";
 
 export const SignUp = () => {
+  // const { signup} = UserProvider()
+
+  const { signup } = useUserContext();
   return (
     <Wrapper>
       <div className="signup-from">
@@ -13,28 +18,64 @@ export const SignUp = () => {
           <div className="form-header">
             <p>Create Account</p>
           </div>
-          <form className="signup-react-form">
-            <div className="form-input">
-              <label htmlFor="fullname">Full Name</label>
-              <Person2Icon />
-              <input id="fullname" placeholder="Enter Full Name" />
-            </div>
-            <div className="form-input">
-              <EmailIcon />
-              <label htmlFor="email">Email</label>
-              <input id="email" type="email" placeholder="Enter Your Email" />
-            </div>
-            <div className="form-input">
-              <KeyIcon />
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter Your Password"
-              />
-            </div>
-            <button type="submit">Sign-Up</button>
-          </form>
+
+          <Formik
+            initialValues={{ email: "", password: "", fullname: "" }}
+            onSubmit={(values, { resetForm }) => {
+              console.log(values);
+              signup(values, resetForm);
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              setFieldValue,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
+              <form className="signup-react-form" onSubmit={handleSubmit}>
+                <div className="form-input">
+                  <label htmlFor="fullname">Full Name</label>
+                  <Person2Icon />
+                  <input
+                    id="fullname"
+                    placeholder="Enter Full Name"
+                    name="fullname"
+                    value={values.fullname}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-input">
+                  <EmailIcon />
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="Enter Your Email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-input">
+                  <KeyIcon />
+                  <label htmlFor="password">Password</label>
+                  <input
+                    id="password"
+                    type="password"
+                    placeholder="Enter Your Password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                  />
+                </div>
+                <button type="submit">Sign-Up</button>
+              </form>
+            )}
+          </Formik>
           <div className="form-footer">
             <p className="text-legend">- OR -</p>
 

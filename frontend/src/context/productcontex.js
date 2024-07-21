@@ -5,7 +5,6 @@ import { API } from "../utils/Constant";
 
 const AppContext = createContext();
 
-// const API = "https://api.pujakaitem.com/api/products";
 
 const initialState = {
   isLoading: false,

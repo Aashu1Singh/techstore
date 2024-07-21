@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink  } from "react-router-dom";
 import styled from "styled-components";
 import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
+import { Formik } from "formik";
+import { useUserContext } from "../context/user_context";
 
 export const Login = (props) => {
   const [showPassword, setShowPassword] = useState();
+
+
+  const {loginUser} = useUserContext()
   return (
     <Wrapper>
       <div className="login-main">
@@ -15,20 +20,48 @@ export const Login = (props) => {
               <h1>Welcome back!</h1>
               <h3>Please enter your details</h3>
             </div>
-
-            <form className="login-react-form">
-              <div className="form-input">
-                <EmailIcon />
-                <label htmlFor="email">Email</label>
-                <input id="email" type="email" placeholder="Email" />
-              </div>
-              <div className="form-input">
-                <KeyIcon />
-                <label htmlFor="password">Password</label>
-                <input id="password" type="password" placeholder="Password" />
-              </div>
-              <div className="pass-input-div">
-                {/* {showPassword ? (
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              onSubmit={(values) => {
+                loginUser(values)
+                // console.log(values);
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                setFieldValue,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                <form className="login-react-form" onSubmit={handleSubmit}>
+                  <div className="form-input">
+                    <EmailIcon />
+                    <label htmlFor="email">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="Email"
+                      name="email"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-input">
+                    <KeyIcon />
+                    <label htmlFor="password">Password</label>
+                    <input
+                      id="password"
+                      type="password"
+                      placeholder="Password"
+                      name="password"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="pass-input-div">
+                    {/* {showPassword ? (
                   <FaEyeSlash
                     onClick={() => {
                       setShowPassword(!showPassword);
@@ -41,12 +74,14 @@ export const Login = (props) => {
                     }}
                   />
                 )} */}
-              </div>
+                  </div>
 
-              <div className="login-center-buttons">
-                <button type="button">Log In</button>
-              </div>
-            </form>
+                  <div className="login-center-buttons">
+                    <button type="submit">Log In</button>
+                  </div>
+                </form>
+              )}
+            </Formik>
             <div className="login-bottom-form">
               <p className="login-bottom-p">
                 Don't have an account? <NavLink to="/signup">Sign Up</NavLink>
