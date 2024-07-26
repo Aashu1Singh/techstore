@@ -61,7 +61,11 @@ const loginUser = (req, response) => {
     let verifyUser = bcrypt.compareSync(password, result[0].password);
 
     if (verifyUser) {
-      let verifiedUser = { user_id: result[0].user_id };
+      let verifiedUser = {
+        user_id: result[0].user_id,
+        email: result[0].email,
+        fullname: result[0].fullname,
+      };
 
       console.log(verifiedUser);
 
@@ -73,10 +77,10 @@ const loginUser = (req, response) => {
       let updateValues = [accessToken, verifiedUser.user_id];
 
       connection.query(updateQuery, updateValues, (err, res) => {
-        console.log(err);
+        // console.log(err);
         if (err) throw new Error(err);
 
-        response.status(200).json({
+        return response.status(200).json({
           message: "Logged In ",
           accessToken: accessToken,
         });
