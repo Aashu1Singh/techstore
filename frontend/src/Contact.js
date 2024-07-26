@@ -1,8 +1,8 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
+import useLogin from "./hooks/useLogin";
 
 const Contact = () => {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user } = useLogin();
  
 
   const Wrapper = styled.section`
@@ -64,7 +64,7 @@ const Contact = () => {
               type="text"
               placeholder="username"
               name="username"
-              value={isAuthenticated ? user.name : ""}
+              value={isAuthenticated ? user.fullname : ""}
               required
               autoComplete="off"
             />

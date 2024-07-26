@@ -8,7 +8,6 @@ import { Formik } from "formik";
 import { useUserContext } from "../context/user_context";
 
 export const SignUp = () => {
-  // const { signup} = UserProvider()
 
   const { signup } = useUserContext();
   return (

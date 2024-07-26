@@ -2,7 +2,7 @@ import { useContext, createContext, useReducer } from "react";
 import { userReducer } from "../reducer/userReducer";
 import axios from "axios";
 import { API } from "../utils/Constant";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const UserContext = createContext();
@@ -15,10 +15,6 @@ const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
   const navigate = useNavigate();
 
-  const ChangeRoute = () => {
-    navigate("");
-  };
-
   const signup = async (values, cb) => {
     try {
       const res = await axios.post(`${API}/users/signup`, values);
@@ -27,6 +23,7 @@ const UserProvider = ({ children }) => {
 
       if (res.status === 200) {
         alert("Sign Up successful");
+        navigate("login");
       }
     } catch (error) {
       alert("Something went wrong");
@@ -46,7 +43,7 @@ const UserProvider = ({ children }) => {
         sessionStorage.setItem("user", JSON.stringify(decodedUser));
 
         alert(res.data.message);
-        ChangeRoute();
+        navigate("");
       }
       console.log(res);
     } catch (error) {

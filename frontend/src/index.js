@@ -23,28 +23,10 @@ import Products from "./Products";
 import Cart from "./Cart";
 import SingleProduct from "./SingleProduct";
 import ErrorPage from "./ErrorPage";
+import Protected from "./Protected";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route exact path="/" element={<App />}>
-        <Route path="" element={<Home />}></Route>
-        <Route path="about" element={<About />}></Route>
-        <Route path="contact" element={<Contact />}></Route>
-        <Route path="login" element={<Login />}></Route>
-        <Route path="signup" element={<SignUp />}></Route>
-        <Route path="products" element={<Products />}></Route>
-        <Route path="/singleproduct/:id" element={<SingleProduct />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Route>
-      <Route exact path="/login" element={<Login />}></Route>
-      <Route exact path="/signup" element={<SignUp />}></Route>
-    </>
-  )
-);
 root.render(
   <BrowserRouter>
     <AppProvider>
@@ -57,7 +39,7 @@ root.render(
                 <Route path="about" element={<About />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="products" element={<Products />} />
-                <Route path="cart" element={<Cart />} />
+                <Route path="cart" element={<Protected Component={Cart} />} />
                 <Route path="singleproduct/:id" element={<SingleProduct />} />
                 <Route path="*" element={<ErrorPage />} />
               </Route>
@@ -68,5 +50,5 @@ root.render(
         </CartProvider>
       </FilterContextProvider>
     </AppProvider>
-   </BrowserRouter>
+  </BrowserRouter>
 );

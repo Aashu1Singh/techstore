@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FiShoppingCart } from "react-icons/fi";
 import { CgMenu, CgClose } from "react-icons/cg";
 import { useCartContext } from "../context/cart_context";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../styles/Button";
+import useLogin from "../hooks/useLogin";
 
 const Nav = () => {
   const [menuIcon, setMenuIcon] = useState();
   const { total_item } = useCartContext();
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user } = useLogin();
+  const navigate = useNavigate();
 
   const Nav = styled.nav`
     .navbar-lists {
@@ -168,6 +169,14 @@ const Nav = () => {
     }
   `;
 
+  const loginWithRedirect = () => {
+    navigate("login");
+  };
+
+  const logout = () => {
+    sessionStorage.clear();
+    navigate("");
+  };
   return (
     <Nav>
       <div className={menuIcon ? "navbar active" : "navbar"}>
@@ -223,11 +232,7 @@ const Nav = () => {
 
           {isAuthenticated ? (
             <li>
-              <Button
-                onClick={() => logout({ returnTo: window.location.origin })}
-              >
-                Log Out
-              </Button>
+              <Button onClick={() => logout()}>Log Out</Button>
             </li>
           ) : (
             <li>
