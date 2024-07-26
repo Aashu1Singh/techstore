@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink  } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
@@ -9,8 +9,7 @@ import { useUserContext } from "../context/user_context";
 export const Login = (props) => {
   const [showPassword, setShowPassword] = useState();
 
-
-  const {loginUser} = useUserContext()
+  const { loginUser } = useUserContext();
   return (
     <Wrapper>
       <div className="login-main">
@@ -23,7 +22,7 @@ export const Login = (props) => {
             <Formik
               initialValues={{ email: "", password: "" }}
               onSubmit={(values) => {
-                loginUser(values)
+                loginUser(values);
                 // console.log(values);
               }}
             >
@@ -77,7 +76,9 @@ export const Login = (props) => {
                   </div>
 
                   <div className="login-center-buttons">
-                    <button type="submit">Log In</button>
+                    <button type="submit" className="login-btn">
+                      Log In
+                    </button>
                   </div>
                 </form>
               )}
@@ -99,7 +100,10 @@ const Wrapper = styled.section`
     display: flex;
     background-color: #ddddddb8;
   }
-
+  .login-btn {
+    border-radius: 0.75rem;
+    padding: 0.7rem;
+  }
   .login-left {
     flex-grow: 1;
     height: 100vh;

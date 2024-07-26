@@ -15,7 +15,7 @@ async function addNewUser(req, res) {
     if (err) throw new Error(err);
 
     if (result.length > 0) {
-      console.log(result);
+      // console.log(result);
       res.status(400).json("User already exists with this email");
 
       return;
@@ -30,6 +30,8 @@ async function addNewUser(req, res) {
       connection.query(queryString, [values], (err, rows) => {
         if (err) {
           console.log(err);
+
+          return res.status(500).json("Some-thing went wrong");
         }
 
         // console.log(rows);
@@ -48,14 +50,12 @@ const loginUser = (req, response) => {
 
   connection.query(queryString, [value], (err, result) => {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
 
     if (result.length === 0) {
       return response
         .status(404)
         .json({ message: "User doesn't exist with this email" });
-
-      // return;
     }
     console.log("after return");
     let verifyUser = bcrypt.compareSync(password, result[0].password);
@@ -67,7 +67,7 @@ const loginUser = (req, response) => {
         fullname: result[0].fullname,
       };
 
-      console.log(verifiedUser);
+      // console.log(verifiedUser);
 
       const accessToken = jwt.sign(verifiedUser, "secret", {
         expiresIn: "1h",
@@ -92,7 +92,7 @@ const loginUser = (req, response) => {
 };
 
 const getUser = (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
 
   const queryString =
     "SELECT user_id, first_name, last_name, email, access_token from user WHERE user_id = ?";
@@ -108,7 +108,7 @@ const getUser = (req, res) => {
       access_token: result[0].access_token,
     };
 
-    console.log(user);
+    // console.log(user);
     res.status(200).json(user);
   });
 };

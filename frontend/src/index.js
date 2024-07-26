@@ -39,7 +39,7 @@ root.render(
                 <Route path="about" element={<About />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="products" element={<Products />} />
-                <Route path="cart" element={<Protected Component={Cart} />} />
+                <Route path="cart" element={<Cart />} />
                 <Route path="singleproduct/:id" element={<SingleProduct />} />
                 <Route path="*" element={<ErrorPage />} />
               </Route>

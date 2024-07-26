@@ -14,6 +14,12 @@ const Nav = () => {
   const navigate = useNavigate();
 
   const Nav = styled.nav`
+    .button {
+      border-radius: 1.2rem;
+    }
+    .navbar-lists > li > a {
+      margin: 0 5px;
+    }
     .navbar-lists {
       display: flex;
       gap: 4.8rem;
@@ -225,22 +231,28 @@ const Nav = () => {
                 className="navbar-link "
                 onClick={() => setMenuIcon(false)}
               >
-                {user.name}
+                <Button className="button">{user.fullname}</Button>
               </NavLink>
             </li>
           )}
 
           {isAuthenticated ? (
             <li>
-              <Button onClick={() => logout()}>Log Out</Button>
+              <Button className="button" onClick={() => logout()}>
+                Log Out
+              </Button>
             </li>
           ) : (
             <li>
               <NavLink to="/login">
-                <Button onClick={() => loginWithRedirect()}>Log In</Button>
+                <Button className="button" onClick={() => loginWithRedirect()}>
+                  Log In
+                </Button>
               </NavLink>
               <NavLink to="/signup">
-                <Button onClick={() => loginWithRedirect()}>Sign UP</Button>
+                <Button className="button" onClick={() => loginWithRedirect()}>
+                  Sign UP
+                </Button>
               </NavLink>
             </li>
           )}
