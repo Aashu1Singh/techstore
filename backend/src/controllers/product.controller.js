@@ -2,10 +2,12 @@ const connection = require("../db/db");
 
 const getAllProduct = (req, res) => {
   console.log("getAllProduct");
-  const queryString = "SELECT * from product";
+  const queryString =
+    "Select prod_id, name, price , category, stars, description, stock ,featured, url as image from product left join image on  (product.prod_id = image.id AND image.show = 1 );";
 
   connection.query(queryString, [], (err, result) => {
-    if (err) throw err;
+    if (err) throw Error;
+    // console.log(result);
 
     res.status(200).json(result);
   });
@@ -17,19 +19,29 @@ const getSingleProduct = (req, res) => {
   const value = [id];
 
   connection.query(queryString, value, (err, result) => {
-    if (err) throw err;
+    if (err) throw Error;
 
-    const data = result[0];
-    let parsedImageObj = JSON.parse(data.image)
-    data.image = parsedImageObj.image;
-    console.log(data);
+    // console.log(typeof result);
+    const data = JSON.parse(JSON.stringify(result[0]));
+    // console.log(typeof data);
 
-    res.status(200).json(result);
+    const query = "SELECT * from image WHERE id=?";
+    connection.query(query, data.prod_id, (err, result2) => {
+      if (err) throw Error;
+
+      data.image = JSON.parse(JSON.stringify(result2));
+
+      console.log(data);
+
+      res.status(200).json(data);
+    });
   });
 };
 
 const addSingleProduct = (req, res) => {
   // const { }
+
+  console.log(req.body);
 
   res.send();
 };
@@ -37,30 +49,23 @@ const addSingleProduct = (req, res) => {
 const updateProduct = (req, res) => {
   const { prod_id } = req.body;
   let fieldsToUpdate = {
-    image: req.body["image"],
+    // image: req.body["image"],
   };
   for (const field in req.body) {
-    if (field == "prod_id") continue;
+    if (field == "prod_id" || field == "image") continue;
     fieldsToUpdate[field] = req.body[field];
   }
   console.log(fieldsToUpdate);
-  const queryString = `UPDATE product SET image= ? WHERE prod_id=${prod_id}`;
+  const queryString = `UPDATE product SET  ? WHERE prod_id=${prod_id}`;
 
-  connection.query(
-    queryString,
-    JSON.stringify(fieldsToUpdate),
-    (err, result) => {
-      if (err) {
-        console.log(err);
+  connection.query(queryString, fieldsToUpdate, (err, result) => {
+    if (err) {
+      console.log(err);
 
-        throw new Error();
-      }
-
-      res.status(200).json({ message: "Product info updated" });
-
-      // console.log(result);
+      throw new Error();
     }
-  );
+  });
+  res.status(200).json({ message: "Product info updated" });
 };
 
 module.exports = {

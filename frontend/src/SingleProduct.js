@@ -21,7 +21,7 @@ const SingleProduct = () => {
   const { id } = useParams();
 
   const {
-    id: alias,
+    // prod_id: id,
     name,
     company,
     price,
@@ -32,7 +32,7 @@ const SingleProduct = () => {
 
     image,
   } = singleProduct;
-  console.log(singleProduct);
+  // console.log(singleProduct);
 
   useEffect(() => {
     getSingleProduct(id);

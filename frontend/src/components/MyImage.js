@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const MyImage = ({ imgs = [{ url: "" }] }) => {
-  const [mainImage, setMainImage] = useState(imgs ? imgs[0] : []);
+  // console.log(imgs);
+  const [mainImage, setMainImage] = useState(imgs[0]);
 
   return (
     <Wrapper>
       <div className="grid grid-four-column">
-        {imgs && imgs.map((curElm, index) => {
+        {imgs.map((curElm, index) => {
           return (
-            <figure>
+            <figure key={curElm.url}>
               <img
                 src={curElm.url}
                 alt={curElm.filename}
