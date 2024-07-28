@@ -1,43 +1,49 @@
 const connection = require("../db/db");
 const { uploadMultipleOnCloudinary } = require("../utils/Cloudinary");
 
-const getAllProduct = (req, res) => {
+const getAllProduct = async (req, res) => {
   console.log("getAllProduct");
-  const queryString =
-    "Select prod_id, name, price , category, stars, description, stock ,featured, url as image from product left join image on  (product.prod_id = image.id AND image.show = 1 );";
 
-  connection.query(queryString, [], (err, result) => {
-    if (err) throw Error;
-    // console.log(result);
+  try {
+    const queryString =
+      "Select prod_id, name, price , category, stars, description, stock ,featured, url as image from product left join image on  (product.prod_id = image.id AND image.show = 1 );";
 
+    const result = await connection.query(queryString);
     res.status(200).json(result);
-  });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
 };
-const getSingleProduct = (req, res) => {
+
+const getSingleProduct = async (req, res) => {
   const { id } = req.params;
 
   console.log("get Single product");
   const queryString = "SELECT * from product where prod_id = (?)";
   const value = [id];
 
-  connection.query(queryString, value, (err, result) => {
-    if (err) throw Error;
+  try {
+    const [result] = await connection.query(queryString, value);
 
-    // console.log(typeof result);
-    const data = JSON.parse(JSON.stringify(result[0]));
-    // console.log(typeof data);
+    const responseData = JSON.parse(JSON.stringify(result[0]));
 
-    const query = "SELECT * from image WHERE id=?";
-    connection.query(query, data.prod_id, (err, result2) => {
-      if (err) throw Error;
+    const query = "SELECT * from image WHERE id=(?)";
+    const result2 = await connection.query(query, [id]);
 
-      data.image = JSON.parse(JSON.stringify(result2));
+    responseData.image = JSON.parse(JSON.stringify(result2[0]));
 
-      console.log(data);
+    // console.log(responseData);
+    res.status(200).json(responseData);
+  } catch (error) {
+    res.status(400).json({ message: "Internal server error" });
 
-      res.status(200).json(data);
-    });
-  });
+    console.log(error);
+  }
 };
 
 const addSingleProduct = (req, res) => {
@@ -58,17 +64,17 @@ const updateProduct = async (req, res) => {
 
     fieldsToUpdate[field] = req.body[field];
   }
-  console.log(fieldsToUpdate);
-  const queryString = `UPDATE product SET  ? WHERE prod_id=${prod_id}`;
+  // console.log(fieldsToUpdate);
 
-  connection.query(queryString, fieldsToUpdate, (err, result) => {
-    if (err) {
-      console.log(err);
+  try {
+    const queryString = `UPDATE product SET  ? WHERE prod_id=${prod_id}`;
 
-      throw new Error();
-    }
-  });
-  res.status(200).json({ message: "Product info updated" });
+    let result = connection.query(queryString, fieldsToUpdate);
+    res.status(200).json({ message: "Product info updated" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Internal server error" });
+  }
 };
 
 const fileUpload = async (req, res) => {

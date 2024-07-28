@@ -1,9 +1,9 @@
 const express = require("express");
 const {
   addNewUser,
-  getUser,
   loginUser,
   updateUser,
+  getUserDetails,
 } = require("../controllers/user.controller");
 const authenticate = require("../middlewares/authenticate");
 
@@ -20,6 +20,6 @@ userRouter.route("/login").post(loginUser);
 
 // /secured routes
 
-userRouter.route("/getUser").post(authenticate, getUser);
+userRouter.route("/getUser").post(authenticate, getUserDetails);
 
 module.exports = userRouter;

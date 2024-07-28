@@ -2,135 +2,137 @@ const bcrypt = require("bcrypt");
 const connection = require("../db/db");
 const jwt = require("jsonwebtoken");
 
-async function addNewUser(req, res) {
+const addNewUser = async (req, res) => {
   const { email, password, fullname } = req.body;
 
   if (!email || !password) {
     return res.status(400).json("Email and Password are required");
   }
 
-  let queryString = "SELECT * from user WHERE email=(?)";
-  let values = [email];
-  connection.query(queryString, [values], async (err, result) => {
-    if (err) throw new Error(err);
+  try {
+    let queryString = "SELECT * from user WHERE email=(?)";
+    let values = [email];
 
-    if (result.length > 0) {
-      // console.log(result);
-      res.status(400).json("User already exists with this email");
+    const existingUser = await connection.query(queryString, [values]);
 
+    if (!existingUser) {
+      res.status(400).json({ message: "User already exists with this email" });
       return;
-    } else {
-      // console.table([firstname, lastname, email, password]);
-      let passwordHash = await bcrypt.hash(password, 8);
-
-      queryString = "INSERT into user ( fullname, email, password) values (?);";
-
-      values = [fullname, email, passwordHash];
-
-      connection.query(queryString, [values], (err, rows) => {
-        if (err) {
-          console.log(err);
-
-          return res.status(500).json("Some-thing went wrong");
-        }
-
-        return;
-      });
-
-      queryString =
-        "SELECT fullname, email, user_id from  user where email = ?;";
-      connection.query(queryString, email, (err, rows) => {
-        if (err) {
-          console.log(err);
-
-          return res.status(500).json("Some-thing went wrong");
-        }
-        console.log(rows);
-        res.status(200).json({
-          statusCode: 200,
-          message: "User Registed successfully",
-          data: {
-            ...JSON.parse(JSON.stringify(rows[0])),
-          },
-        });
-      });
     }
-  });
-}
 
-const loginUser = (req, response) => {
-  const { email, password } = req.body;
+    let passwordHash = await bcrypt.hash(password, 8);
 
-  let queryString = "SELECT * from user WHERE email = (?);";
-  let value = [email];
+    queryString = "INSERT into user ( fullname, email, password) values (?);";
 
-  connection.query(queryString, [value], (err, result) => {
-    if (err) throw err;
-    // console.log(result);
+    values = [fullname, email, passwordHash];
 
-    if (result.length === 0) {
-      return response
-        .status(404)
-        .json({ message: "User doesn't exist with this email" });
-    }
-    console.log("after return");
-    let verifyUser = bcrypt.compareSync(password, result[0].password);
+    const result = await connection.query(queryString, [values]);
 
-    if (verifyUser) {
-      let verifiedUser = {
-        user_id: result[0].user_id,
-        email: result[0].email,
-        fullname: result[0].fullname,
-      };
+    queryString = "SELECT fullname, email, user_id from  user where email = ?;";
 
-      // console.log(verifiedUser);
+    let user = await connection.query(queryString, email);
 
-      const accessToken = jwt.sign(verifiedUser, "secret", {
-        expiresIn: "1h",
-      });
+    res.status(200).json({
+      statusCode: 200,
+      message: "User Registed successfully",
+      data: {
+        ...JSON.parse(JSON.stringify(user[0])),
+      },
+    });
+  } catch (error) {
+    console.log(error);
 
-      let updateQuery = "UPDATE user SET access_token = ? WHERE user_id = ?;";
-      let updateValues = [accessToken, verifiedUser.user_id];
-
-      connection.query(updateQuery, updateValues, (err, res) => {
-        // console.log(err);
-        if (err) throw new Error(err);
-
-        return response.status(200).json({
-          message: "Logged In ",
-          accessToken: accessToken,
-        });
-      });
-    } else {
-      response.status(401).json({ message: "Wrong Password" });
-    }
-  });
+    res.status(500).json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
 };
 
-const getUser = (req, res) => {
-  // console.log(req.user);
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-  const queryString =
-    "SELECT user_id, first_name, last_name, email, access_token from user WHERE user_id = ?";
-  const value = [req.user?.user_id];
+  try {
+    let queryString = "SELECT * from user WHERE email = (?);";
+    let value = [email];
 
-  connection.query(queryString, [value], (err, result) => {
-    if (err) throw err;
+    let [user] = await connection.query(queryString, [value]);
+    let existingUser = user[0];
 
-    let user = {
-      user_id: result[0].user_id,
-      fullname: result[0].fullname,
-      email: result[0].email,
-      access_token: result[0].access_token,
+    if (!existingUser) {
+      res.status(404).json({ message: "User doesn't exist with this email" });
+
+      return;
+    }
+
+    let verifyUser = bcrypt.compareSync(password, existingUser.password);
+
+    if (!verifyUser) {
+      res.status(404).json({ message: "Wrong Password" });
+    }
+
+    let verifiedUser = {
+      user_id: existingUser.user_id,
+      email: existingUser.email,
+      fullname: existingUser.fullname,
     };
 
-    // console.log(user);
-    res.status(200).json(user);
-  });
+    const accessToken = jwt.sign(verifiedUser, "secret", {
+      expiresIn: "1h",
+    });
+
+    let updateQuery = "UPDATE user SET access_token = ? WHERE user_id = ?;";
+    let updateValues = [accessToken, verifiedUser.user_id];
+
+    let result = await connection.query(updateQuery, updateValues);
+
+    return res.status(200).json({
+      message: "User Logged In ",
+      accessToken: accessToken,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+};
+
+const getUserDetails = async (req, res) => {
+  const { user_id } = req.body;
+
+  try {
+    const queryString =
+      "SELECT user_id, fullname, email, access_token from user WHERE user_id = ?";
+    const value = [user_id];
+
+    let [result] = await connection.query(queryString, [value]);
+    const user = result[0];
+    console.log(user);
+
+    if (!user) {
+      res.status(200).json({
+        data: user,
+      });
+      return;
+    }
+
+    res.status(200).json({
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
 };
 
 module.exports = {
   addNewUser,
-  getUser,
+  getUserDetails,
   loginUser,
 };
