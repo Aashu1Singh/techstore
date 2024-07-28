@@ -1,4 +1,5 @@
 const connection = require("../db/db");
+const { uploadMultipleOnCloudinary } = require("../utils/Cloudinary");
 
 const getAllProduct = (req, res) => {
   console.log("getAllProduct");
@@ -15,6 +16,7 @@ const getAllProduct = (req, res) => {
 const getSingleProduct = (req, res) => {
   const { id } = req.params;
 
+  console.log("get Single product");
   const queryString = "SELECT * from product where prod_id = (?)";
   const value = [id];
 
@@ -46,13 +48,14 @@ const addSingleProduct = (req, res) => {
   res.send();
 };
 
-const updateProduct = (req, res) => {
+const updateProduct = async (req, res) => {
   const { prod_id } = req.body;
-  let fieldsToUpdate = {
-    // image: req.body["image"],
-  };
+
+  let fieldsToUpdate = {};
+
   for (const field in req.body) {
     if (field == "prod_id" || field == "image") continue;
+
     fieldsToUpdate[field] = req.body[field];
   }
   console.log(fieldsToUpdate);
@@ -68,9 +71,29 @@ const updateProduct = (req, res) => {
   res.status(200).json({ message: "Product info updated" });
 };
 
+const fileUpload = async (req, res) => {
+  console.log("biuhiiu");
+  // console.log(req.file);
+  console.log(req.files);
+
+  let localFilePaths = req.files?.images.map((item) => item.path);
+  // console.log(localFilePaths);
+  if (localFilePaths.length === 0) {
+    return res.status(400).json({
+      messsge: "File is required",
+    });
+  }
+
+  let response = await uploadMultipleOnCloudinary(localFilePaths);
+  console.log("0", response);
+
+  res.send();
+};
+
 module.exports = {
   getAllProduct,
   getSingleProduct,
   updateProduct,
   addSingleProduct,
+  fileUpload,
 };

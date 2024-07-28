@@ -34,9 +34,25 @@ async function addNewUser(req, res) {
           return res.status(500).json("Some-thing went wrong");
         }
 
-        // console.log(rows);
-        res.status(200).json("User added");
         return;
+      });
+
+      queryString =
+        "SELECT fullname, email, user_id from  user where email = ?;";
+      connection.query(queryString, email, (err, rows) => {
+        if (err) {
+          console.log(err);
+
+          return res.status(500).json("Some-thing went wrong");
+        }
+        console.log(rows);
+        res.status(200).json({
+          statusCode: 200,
+          message: "User Registed successfully",
+          data: {
+            ...JSON.parse(JSON.stringify(rows[0])),
+          },
+        });
       });
     }
   });
