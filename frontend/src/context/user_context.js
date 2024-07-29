@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const UserContext = createContext();
 
 const initialState = {
-  user: "",
+  userData: {},
 };
 
 const UserProvider = ({ children }) => {
@@ -52,8 +52,23 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const getUserData = async () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    let token = sessionStorage.getItem("token");
+    let payload = { user_id: user.user_id };
+
+    const res = await axios.post(`${API}/users/getUser`, payload, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    console.log(res);
+
+    dispatch({ type: "SET_USER", payload: res.data.data });
+  };
+
   return (
-    <UserContext.Provider value={{ signup, loginUser }}>
+    <UserContext.Provider value={{ ...state, signup, loginUser, getUserData }}>
       {children}
     </UserContext.Provider>
   );

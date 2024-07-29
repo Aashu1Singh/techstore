@@ -26,7 +26,25 @@ productRouter.route("/:id").get(getSingleProduct);
 
 // protected routes
 
-productRouter.route("/update-product").put(authenticate, updateProduct);
-productRouter.route("/add-product").post(authenticate, addSingleProduct);
+productRouter.route("/update-product").put(
+  authenticate,
+  upload.fields([
+    {
+      name: "images",
+      maxCount: 5,
+    },
+  ]),
+  updateProduct
+);
+productRouter.route("/add-product").post(
+  authenticate,
+  upload.fields([
+    {
+      name: "images",
+      maxCount: 5,
+    },
+  ]),
+  addSingleProduct
+);
 
 module.exports = productRouter;

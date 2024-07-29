@@ -24,6 +24,7 @@ import Cart from "./Cart";
 import SingleProduct from "./SingleProduct";
 import ErrorPage from "./ErrorPage";
 import Protected from "./Protected";
+import Profile from "./components/Profile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -37,6 +38,10 @@ root.render(
               <Route path="/" element={<App />}>
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
+                <Route
+                  path="profile"
+                  element={<Protected Component={Profile} />}
+                />
                 <Route path="contact" element={<Contact />} />
                 <Route path="products" element={<Products />} />
                 <Route path="cart" element={<Cart />} />

@@ -8,7 +8,7 @@ const getAllProduct = async (req, res) => {
     const queryString =
       "Select prod_id, name, price , category, stars, description, stock ,featured, url as image from product left join image on  (product.prod_id = image.id AND image.show = 1 );";
 
-    const result = await connection.query(queryString);
+    const [result] = await connection.query(queryString);
     res.status(200).json(result);
   } catch (error) {
     console.log(error);
@@ -21,9 +21,10 @@ const getAllProduct = async (req, res) => {
 };
 
 const getSingleProduct = async (req, res) => {
+  console.log("get Single product");
+  // console.log();
   const { id } = req.params;
 
-  console.log("get Single product");
   const queryString = "SELECT * from product where prod_id = (?)";
   const value = [id];
 
@@ -45,32 +46,96 @@ const getSingleProduct = async (req, res) => {
     console.log(error);
   }
 };
+// rgb(7 56 30)
+const addSingleProduct = async (req, res) => {
+  console.log("addSingleProduct");
 
-const addSingleProduct = (req, res) => {
-  // const { }
+  const { name, price, category, stars, description, stock, featured } =
+    req.body;
 
-  console.log(req.body);
+  try {
+    let query =
+      "INSERT INTO product ( name, price, category, stars, description, stock, featured) VALUES (?)";
+    let value = [name, price, category, stars, description, stock, featured];
 
-  res.send();
+    const [response] = await connection.query(query, [value]);
+
+    const prod_id = JSON.parse(JSON.stringify(response)).insertId;
+
+    // query = 'INS'
+    let localFilePaths = req.files?.images?.map((item) => item.path);
+    console.log(localFilePaths);
+    console.log(req.files);
+
+    if (localFilePaths) {
+      let responseUrls = await uploadMultipleOnCloudinary(localFilePaths);
+      responseUrls.map(async (item, index) => {
+        let queryString1 =
+          "INSERT INTO image (id, url , width, height,filename, size ) VALUES (?);";
+        let values = [
+          Number(prod_id),
+          item.url,
+          item.width,
+          item.height,
+          `${item.original_filename}-${index + 1}`,
+          item.bytes,
+        ];
+        await connection.query(queryString1, [values]);
+      });
+    }
+
+    res
+      .status(200)
+      .json({ statusCode: "200", message: "Product Added succesfully" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ statusCode: "400", message: "Something went wrong" });
+  }
 };
 
 const updateProduct = async (req, res) => {
+  console.log("updateProduct");
   const { prod_id } = req.body;
 
   let fieldsToUpdate = {};
 
   for (const field in req.body) {
-    if (field == "prod_id" || field == "image") continue;
+    if (field == "prod_id") continue;
 
     fieldsToUpdate[field] = req.body[field];
   }
-  // console.log(fieldsToUpdate);
 
   try {
-    const queryString = `UPDATE product SET  ? WHERE prod_id=${prod_id}`;
+    const queryString = `UPDATE product SET ? WHERE prod_id=${prod_id}`;
 
-    let result = connection.query(queryString, fieldsToUpdate);
-    res.status(200).json({ message: "Product info updated" });
+    let result = await connection.query(queryString, fieldsToUpdate);
+
+    let localFilePaths = req.files?.images?.map((item) => item.path);
+    console.log(localFilePaths);
+    console.log(req.files);
+
+    if (localFilePaths) {
+      let responseUrls = await uploadMultipleOnCloudinary(localFilePaths);
+      responseUrls.map(async (item, index) => {
+        let queryString1 =
+          "INSERT INTO image (id, url , width, height,filename, size ) VALUES (?);";
+        let values = [
+          Number(prod_id),
+          item.url,
+          item.width,
+          item.height,
+          `${item.original_filename}-${index + 1}`,
+          item.bytes,
+        ];
+        await connection.query(queryString1, [values]);
+      });
+    }
+
+    res
+      .status(200)
+      .json({ statusCode: "200", message: "Product info updated" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Internal server error" });
@@ -78,12 +143,9 @@ const updateProduct = async (req, res) => {
 };
 
 const fileUpload = async (req, res) => {
-  console.log("biuhiiu");
-  // console.log(req.file);
-  console.log(req.files);
+  console.log("fileUpload");
 
   let localFilePaths = req.files?.images.map((item) => item.path);
-  // console.log(localFilePaths);
   if (localFilePaths.length === 0) {
     return res.status(400).json({
       messsge: "File is required",
