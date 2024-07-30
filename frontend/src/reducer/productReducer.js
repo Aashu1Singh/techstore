@@ -1,5 +1,4 @@
 const ProductReducer = (state, action) => {
-
   switch (action.type) {
     case "SET_LOADING":
       return {
@@ -44,6 +43,15 @@ const ProductReducer = (state, action) => {
         ...state,
         isSingleLoading: false,
         isError: true,
+      };
+
+    case "SET_CHECKOUT_INFO":
+      return {
+        ...state,
+        checkOut: {
+          products: action.payload.data,
+          total: action.payload.total,
+        },
       };
 
     default:

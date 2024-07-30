@@ -62,7 +62,7 @@ const UserProvider = ({ children }) => {
         Authorization: "Bearer " + token,
       },
     });
-    console.log(res);
+    // console.log(res);
 
     dispatch({ type: "SET_USER", payload: res.data.data });
   };

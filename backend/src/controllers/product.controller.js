@@ -142,6 +142,52 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const calculatePrice = async (req, res) => {
+  const { products } = req.body;
+
+  // console.log(req.body);
+
+  if (!products) {
+    return res.status(500).json({
+      message: "product is required",
+    });
+  }
+
+  try {
+    let query = "SELECT prod_id, price from product where prod_id IN (?)";
+
+    let value = [...products.map((item) => item.prod_id)];
+
+    const [result] = await connection.query(query, [value]);
+    const priceList = JSON.parse(JSON.stringify(result));
+
+    const responseData = products.map((product) => ({
+      prod_id: product.prod_id,
+      quantity: product.quantity,
+      price: priceList.reduce((accu, curr) => {
+        if (curr.prod_id === product.prod_id) {
+          return Number(curr.price) * Number(product.quantity) + accu;
+        } else {
+          return accu;
+        }
+      }, 0),
+    }));
+    // console.log(responseData);
+    let total = responseData.reduce((accu, curr) => (accu += curr.price), 0);
+
+    res.status(200).json({
+      message: "Total amount to pay",
+      data: responseData,
+      total,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Some thing went wrong",
+    });
+  }
+};
+
 const fileUpload = async (req, res) => {
   console.log("fileUpload");
 
@@ -164,4 +210,5 @@ module.exports = {
   updateProduct,
   addSingleProduct,
   fileUpload,
+  calculatePrice,
 };

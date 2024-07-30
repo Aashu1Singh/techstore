@@ -4,14 +4,17 @@ import CartItem from "./components/CartItem";
 import { NavLink } from "react-router-dom";
 import { Button } from "./styles/Button";
 import FormatPrice from "./Helpers/FormatPrice";
-
+import useLogin from "./hooks/useLogin";
+import { useProductContext } from "./context/productcontex";
 
 const Cart = () => {
   const { cart, clearCart, total_price, shipping_fee } = useCartContext();
 
+  const { checkOutPrice } = useProductContext();
 
-  // const { isAuthenticated, user } = useAuth0();
+  // console.log(cart);
 
+  const { isAuthenticated, user } = useLogin();
 
   if (cart.length === 0) {
     return (
@@ -21,15 +24,20 @@ const Cart = () => {
     );
   }
 
+  const handleCheckout = () => {
+    const items = cart;
+    checkOutPrice(items);
+  };
+
   return (
     <Wrapper>
       <div className="container">
-        {/* {isAuthenticated && ( */}
+        {isAuthenticated && (
           <div className="cart-user--profile">
-            {/* <img src={user.profile} alt={user.name} /> */}
-            {/* <h2 className="cart-user--name">{user.name}</h2> */}
+            <img src="/download.png" alt={user?.fullname} />
+            <h2 className="cart-user--name">{user.fullname}</h2>
           </div>
-        {/* )} */}
+        )}
 
         <div className="cart_heading grid grid-five-column">
           <p>Item</p>
@@ -47,7 +55,20 @@ const Cart = () => {
         <hr />
         <div className="cart-two-button">
           <NavLink to="/products">
-            <Button style={{backgroundColor : "#25274D", color: "#fff"}}> continue Shopping </Button>
+            <Button style={{ backgroundColor: "#25274D", color: "#fff" }}>
+              {" "}
+              continue Shopping{" "}
+            </Button>
+          </NavLink>
+
+          <NavLink to="/checkout">
+            <Button
+              style={{ backgroundColor: "#25274D", color: "#fff" }}
+              onClick={handleCheckout}
+            >
+              {" "}
+              Buy Now
+            </Button>
           </NavLink>
           <Button className="btn btn-clear" onClick={clearCart}>
             clear cart

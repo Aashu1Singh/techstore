@@ -6,6 +6,7 @@ const {
   updateProduct,
   addSingleProduct,
   fileUpload,
+  calculatePrice,
 } = require("../controllers/product.controller");
 const authenticate = require("../middlewares/authenticate");
 const upload = require("../middlewares/multer");
@@ -46,5 +47,7 @@ productRouter.route("/add-product").post(
   ]),
   addSingleProduct
 );
+
+productRouter.route("/calculate").post(authenticate, calculatePrice);
 
 module.exports = productRouter;

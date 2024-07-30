@@ -5,7 +5,6 @@ import { API } from "../utils/Constant";
 
 const AppContext = createContext();
 
-
 const initialState = {
   isLoading: false,
   isError: false,
@@ -13,6 +12,10 @@ const initialState = {
   featureProducts: [],
   isSingleLoading: false,
   singleProduct: {},
+  checkOut: {
+    products: [],
+    totalPrice: 0,
+  },
 };
 
 const AppProvider = ({ children }) => {
@@ -45,12 +48,38 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const checkOutPrice = async (items) => {
+    // console.log(items);
+    const payload = items.map((item) => ({
+      prod_id: Number(item.id),
+      quantity: item.amount,
+    }));
+
+    const token = sessionStorage.getItem("token");
+
+    const res = await axios.post(
+      `${API}/product/calculate`,
+      { products: payload },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
+    dispatch({
+      type: "SET_CHECKOUT_INFO",
+      payload: res.data,
+    });
+    // console.log(res);
+  };
+
   useEffect(() => {
     getProducts(API);
   }, []);
 
   return (
-    <AppContext.Provider value={{ ...state, getSingleProduct }}>
+    <AppContext.Provider value={{ ...state, getSingleProduct, checkOutPrice }}>
       {children}
     </AppContext.Provider>
   );

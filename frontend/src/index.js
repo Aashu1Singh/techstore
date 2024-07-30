@@ -25,6 +25,7 @@ import SingleProduct from "./SingleProduct";
 import ErrorPage from "./ErrorPage";
 import Protected from "./Protected";
 import Profile from "./components/Profile";
+import CheckOut from "./components/CheckOut";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -45,6 +46,10 @@ root.render(
                 <Route path="contact" element={<Contact />} />
                 <Route path="products" element={<Products />} />
                 <Route path="cart" element={<Cart />} />
+                <Route
+                  path="checkout"
+                  element={<Protected Component={CheckOut} />}
+                />
                 <Route path="singleproduct/:id" element={<SingleProduct />} />
                 <Route path="*" element={<ErrorPage />} />
               </Route>
