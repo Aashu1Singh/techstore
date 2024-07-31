@@ -12,8 +12,6 @@ const Cart = () => {
 
   const { checkOutPrice } = useProductContext();
 
-  // console.log(cart);
-
   const { isAuthenticated, user } = useLogin();
 
   if (cart.length === 0) {
@@ -61,7 +59,7 @@ const Cart = () => {
             </Button>
           </NavLink>
 
-          <NavLink to="/checkout">
+          {/* <NavLink to="/checkout"> */}
             <Button
               style={{ backgroundColor: "#25274D", color: "#fff" }}
               onClick={handleCheckout}
@@ -69,7 +67,7 @@ const Cart = () => {
               {" "}
               Buy Now
             </Button>
-          </NavLink>
+          {/* </NavLink> */}
           <Button className="btn btn-clear" onClick={clearCart}>
             clear cart
           </Button>

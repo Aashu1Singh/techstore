@@ -8,7 +8,6 @@ import { Formik } from "formik";
 import { useUserContext } from "../context/user_context";
 
 export const SignUp = () => {
-
   const { signup } = useUserContext();
   return (
     <Wrapper>
@@ -76,12 +75,10 @@ export const SignUp = () => {
             )}
           </Formik>
           <div className="form-footer">
-            <p className="text-legend">- OR -</p>
-
             <p className="text-footer">
-              Already have an account?
+              Already have an account ?
               <NavLink to="/login">
-                <span className="text-olive">Login</span>
+                <span className="text-olive"> Login</span>
               </NavLink>
             </p>
           </div>
@@ -98,10 +95,12 @@ const Wrapper = styled.section`
     display: flex;
     align-items: center;
     justify-content: center;
-    // flex-direction: row;
     background-color: #e9f8e6;
   }
 
+  .text-footer a {
+    text-decoration: none;
+  }
   .signup-from > .signup-froml {
     width: 40rem;
     display: flex;

@@ -125,7 +125,7 @@ const Wrapper = styled.section`
   }
 
   .login-right-container {
-    padding: 2rem 3.5rem;
+    padding: 0rem 2.5rem;
     height: 27rem;
     width: 21rem;
     margin: auto;

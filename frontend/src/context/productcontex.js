@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import axios from "axios";
 import reducer from "../reducer/productReducer";
 import { API } from "../utils/Constant";
+import { useNavigate } from "react-router-dom";
 
 const AppContext = createContext();
 
@@ -20,6 +21,8 @@ const initialState = {
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const navigate = useNavigate();
 
   const getProducts = async (url) => {
     dispatch({ type: "SET_LOADING" });
@@ -53,25 +56,35 @@ const AppProvider = ({ children }) => {
     const payload = items.map((item) => ({
       prod_id: Number(item.id),
       quantity: item.amount,
-      name: item.name
+      name: item.name,
     }));
 
     const token = sessionStorage.getItem("token");
 
-    const res = await axios.post(
-      `${API}/product/calculate`,
-      { products: payload },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
+    try {
+      const res = await axios.post(
+        `${API}/product/calculate`,
+        { products: payload },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      console.log(res);
 
-    dispatch({
-      type: "SET_CHECKOUT_INFO",
-      payload: res.data,
-    });
+      if (res.status === 200) {
+        console.log("ecergr");
+        dispatch({
+          type: "SET_CHECKOUT_INFO",
+          payload: res.data,
+        });
+        navigate("/checkout");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     // console.log(res);
   };
 

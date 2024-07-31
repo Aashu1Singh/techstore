@@ -71,26 +71,55 @@ const Nav = () => {
                 className="navbar-link "
                 onClick={() => getUserData()}
               >
-                <Button className="button">{user.fullname}</Button>
+                <Button
+                  className="button"
+                  style={{
+                    backgroundColor: "rgb(37, 39, 77)",
+                    color: "white",
+                  }}
+                >
+                  {user.fullname}
+                </Button>
               </NavLink>
             </li>
           )}
 
           {isAuthenticated ? (
             <li>
-              <Button className="button" onClick={() => logout()}>
+              <Button
+                className="button"
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                }}
+                onClick={() => logout()}
+              >
                 Log Out
               </Button>
             </li>
           ) : (
             <li>
               <NavLink to="/login">
-                <Button className="button" onClick={() => loginWithRedirect()}>
+                <Button
+                  className="button"
+                  style={{
+                    backgroundColor: "rgb(37, 39, 77)",
+                    color: "white",
+                  }}
+                  onClick={() => loginWithRedirect()}
+                >
                   Log In
                 </Button>
               </NavLink>
               <NavLink to="/signup">
-                <Button className="button" onClick={() => loginWithRedirect()}>
+                <Button
+                  className="button"
+                  style={{
+                    backgroundColor: "white",
+                    color: "black",
+                  }}
+                  onClick={() => loginWithRedirect()}
+                >
                   Sign UP
                 </Button>
               </NavLink>
