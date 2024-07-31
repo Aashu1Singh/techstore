@@ -154,7 +154,7 @@ const calculatePrice = async (req, res) => {
   }
 
   try {
-    let query = "SELECT prod_id, price from product where prod_id IN (?)";
+    let query = "SELECT prod_id, price, name from product where prod_id IN (?)";
 
     let value = [...products.map((item) => item.prod_id)];
 
@@ -164,6 +164,7 @@ const calculatePrice = async (req, res) => {
     const responseData = products.map((product) => ({
       prod_id: product.prod_id,
       quantity: product.quantity,
+      name: product.name,
       price: priceList.reduce((accu, curr) => {
         if (curr.prod_id === product.prod_id) {
           return Number(curr.price) * Number(product.quantity) + accu;
@@ -186,6 +187,7 @@ const calculatePrice = async (req, res) => {
       message: "Some thing went wrong",
     });
   }
+
 };
 
 const fileUpload = async (req, res) => {

@@ -53,6 +53,7 @@ const AppProvider = ({ children }) => {
     const payload = items.map((item) => ({
       prod_id: Number(item.id),
       quantity: item.amount,
+      name: item.name
     }));
 
     const token = sessionStorage.getItem("token");
