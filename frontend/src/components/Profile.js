@@ -74,7 +74,6 @@ const Wrapper = styled.section`
     width: 23rem;
   }
   .main-container {
-
     display: flex;
     align-items: center;
     justify-content: center;

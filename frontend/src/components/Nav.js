@@ -67,7 +67,7 @@ const Nav = () => {
           {isAuthenticated && (
             <li>
               <NavLink
-                to="/profile"
+                to="/user/profile"
                 className="navbar-link "
                 onClick={() => getUserData()}
               >

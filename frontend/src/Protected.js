@@ -6,6 +6,8 @@ const Protected = (props) => {
   const { Component } = props;
   const navigate = useNavigate();
 
+  console.log(props);
+
   const { isAuthenticated } = useLogin();
 
   useEffect(() => {

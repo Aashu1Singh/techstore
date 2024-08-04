@@ -16,6 +16,8 @@ const MyImage = ({ imgs = [{ url: "" }] }) => {
                 alt={curElm.filename}
                 className="box-image--style"
                 key={index}
+                height={"100%"}
+                width={"100%"}
                 onClick={() => setMainImage(curElm)}
               />
             </figure>

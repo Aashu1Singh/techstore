@@ -79,7 +79,7 @@ const AppProvider = ({ children }) => {
           type: "SET_CHECKOUT_INFO",
           payload: res.data,
         });
-        navigate("/checkout");
+        navigate("/user/checkout");
       }
     } catch (error) {
       console.log(error);
