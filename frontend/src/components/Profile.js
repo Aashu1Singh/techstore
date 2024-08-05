@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useUserContext } from "../context/user_context";
 
 const Profile = () => {
-  const { userData } = useUserContext();
+  const { userData, getUserData } = useUserContext();
   console.log(userData);
+
+  useEffect(() => {
+    if (Object.keys(userData).length === 0) {
+      getUserData();
+    }
+  }, []);
 
   return (
     <Wrapper>

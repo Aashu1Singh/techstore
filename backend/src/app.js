@@ -19,11 +19,13 @@ app.use(express.static("public"));
 //  routes import
 const userRouter = require("./routes/user.routes");
 const productRouter = require("./routes/product.routes");
+const orderRouter = require("./routes/order.routes");
 
 //routes  declaration
 
 app.use("/api/users", userRouter);
 app.use("/api/product", productRouter);
+app.use("/api/order", orderRouter)
 
 
 module.exports = app;

@@ -59,18 +59,10 @@ const AppProvider = ({ children }) => {
       name: item.name,
     }));
 
-    const token = sessionStorage.getItem("token");
-
     try {
-      const res = await axios.post(
-        `${API}/product/calculate`,
-        { products: payload },
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const res = await axios.post(`${API}/product/calculate`, {
+        products: payload,
+      });
       console.log(res);
 
       if (res.status === 200) {

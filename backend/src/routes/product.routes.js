@@ -48,6 +48,6 @@ productRouter.route("/add-product").post(
   addSingleProduct
 );
 
-productRouter.route("/calculate").post(authenticate, calculatePrice);
+productRouter.route("/calculate").post(calculatePrice);
 
 module.exports = productRouter;

@@ -4,6 +4,7 @@ import axios from "axios";
 import { API } from "../utils/Constant";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useCartContext } from "./cart_context";
 
 const UserContext = createContext();
 
@@ -15,10 +16,12 @@ const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
   const navigate = useNavigate();
 
+  const { clearCart } = useCartContext();
+
   const signup = async (values, cb) => {
     try {
       const res = await axios.post(`${API}/users/signup`, values);
-      console.log(res);
+      // console.log(res);
       cb();
 
       if (res.status === 200) {
@@ -67,8 +70,30 @@ const UserProvider = ({ children }) => {
     dispatch({ type: "SET_USER", payload: res.data.data });
   };
 
+  const checkOutFn = async (data) => {
+    let token = sessionStorage.getItem("token");
+    try {
+      const res = await axios.post(`${API}/order`, data, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      if (res.status === 200) {
+        navigate("/user/profile");
+        clearCart();
+      }
+      // console.log(res);
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ ...state, signup, loginUser, getUserData }}>
+    <UserContext.Provider
+      value={{ ...state, signup, loginUser, getUserData, checkOutFn }}
+    >
       {children}
     </UserContext.Provider>
   );

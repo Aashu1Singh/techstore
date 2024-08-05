@@ -145,8 +145,6 @@ const updateProduct = async (req, res) => {
 const calculatePrice = async (req, res) => {
   const { products } = req.body;
 
-  // console.log(req.body);
-
   if (!products) {
     return res.status(500).json({
       message: "product is required",
@@ -173,7 +171,7 @@ const calculatePrice = async (req, res) => {
         }
       }, 0),
     }));
-    // console.log(responseData);
+    
     let total = responseData.reduce((accu, curr) => (accu += curr.price), 0);
 
     res.status(200).json({

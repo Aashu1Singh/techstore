@@ -1,13 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useProductContext } from "../context/productcontex";
 import FormatPrice from "../Helpers/FormatPrice";
 import { Button } from "../styles/Button";
 import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+import { useUserContext } from "../context/user_context";
 
 const CheckOut = () => {
   const { checkOut } = useProductContext();
+  const { checkOutFn } = useUserContext();
   const navigate = useNavigate();
+
+  const [address, setAddress] = useState("");
+
+  const handleProceed = () => {
+    let obj = {
+      products: checkOut.products,
+      address,
+    };
+    checkOutFn(obj);
+  };
+  // console.log(checkOut);
 
   useEffect(() => {
     if (checkOut.products.length === 0) {
@@ -22,78 +36,124 @@ const CheckOut = () => {
         <div className="left-box">
           <h3>Address Details</h3>
           <hr />
-          <div className=" grid address-form ">
-            <div className="half-row grid">
-              <div className="col">
-                {" "}
-                <label for="fname">First name</label>
-                <input
-                  type="text"
-                  id="fname"
-                  name="fname"
-                  minLength={0}
-                  maxLength={6}
-                ></input>
-              </div>
-              <div className="col">
-                <label for="fname">Last name</label>
-                <input type="text" id="fname" name="fname"></input>
-              </div>
-            </div>
-            <div className="half-row grid">
-              <div className="col">
-                {" "}
-                <label for="fname">Number</label>
-                <input
-                  type="number"
-                  id="fname"
-                  name="fname"
-                  maxLength="10"
-                  max={23}
-                ></input>
-              </div>
-              <div className="col">
-                {" "}
-                <label for="fname">Pincode</label>
-                <input
-                  type="number"
-                  id="fname"
-                  name="fname"
-                  minLength={0}
-                  maxLength={6}
-                  size={5}
-                ></input>
-              </div>
-            </div>
-            <div className="full-row">
-              <label htmlFor="address">Address</label>
-              <textarea id="story" name="address" rows="3" cols="2">
-                {" "}
-              </textarea>
-            </div>
 
-            <div className="half-row grid">
-              <div className="col">
-                {" "}
-                <label for="fname">Town</label>
-                <input type="text" id="fname" name="fname"></input>
-              </div>
-              <div className="col">
-                {" "}
-                <label for="fname">State</label>
-                <input type="text" id="fname" name="fname"></input>
-              </div>
-            </div>
-          </div>
+          <Formik
+            initialValues={{}}
+            onSubmit={(values) => {
+              // loginUser(values);
+              console.log(values);
 
-          <div className="address-footer">
-            <Button>Save</Button>
-          </div>
+              let address = `${values.firstName} ${values.lastName}, ${values.address} , ${values.district}, ${values.state}`;
+              console.log(address);
+              setAddress(address);
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              setFieldValue,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
+              <form className="login-react-form" onSubmit={handleSubmit}>
+                <div className=" grid address-form ">
+                  <div className="half-row grid">
+                    <div className="col">
+                      {" "}
+                      <label for="firstName">First name</label>
+                      <input
+                        type="text"
+                        id="fname"
+                        name="firstName"
+                        onChange={handleChange}
+                        minLength={0}
+                        maxLength={6}
+                      ></input>
+                    </div>
+                    <div className="col">
+                      <label for="lastName">Last name</label>
+                      <input
+                        type="text"
+                        id="fname"
+                        name="lastName"
+                        onChange={handleChange}
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="half-row grid">
+                    <div className="col">
+                      {" "}
+                      <label for="phNumber">Number</label>
+                      <input
+                        type="number"
+                        id="fname"
+                        name="phNumber"
+                        maxLength="10"
+                        onChange={handleChange}
+                      ></input>
+                    </div>
+                    <div className="col">
+                      {" "}
+                      <label for="pincode">Pincode</label>
+                      <input
+                        type="number"
+                        id="fname"
+                        name="pincode"
+                        onChange={handleChange}
+                        minLength={0}
+                        maxLength={6}
+                        size={5}
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="full-row">
+                    <label htmlFor="address">Address</label>
+                    <textarea
+                      id="story"
+                      onChange={handleChange}
+                      name="address"
+                      rows="3"
+                      cols="2"
+                    >
+                      {" "}
+                    </textarea>
+                  </div>
+
+                  <div className="half-row grid">
+                    <div className="col">
+                      {" "}
+                      <label for="state">State</label>
+                      <input
+                        type="text"
+                        id="fname"
+                        name="state"
+                        onChange={handleChange}
+                      ></input>
+                    </div>
+                    <div className="col">
+                      {" "}
+                      <label for="district">District</label>
+                      <input
+                        type="text"
+                        id="fname"
+                        name="district"
+                        onChange={handleChange}
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="address-footer">
+                  <Button type="submit">Save</Button>
+                </div>
+              </form>
+            )}
+          </Formik>
         </div>
         <div className="right-box">
-          {/* <h3>
-            Price 
-          </h3> */}
           <div className="grid grid-two-column">
             <p>Item</p>
             <p className="cart-hide">Quantity</p>
@@ -144,7 +204,10 @@ const CheckOut = () => {
             </div>
           </div>
           <div className="bill-footer">
-            <Button style={{ backgroundColor: "black", color: "white" }}>
+            <Button
+              style={{ backgroundColor: "black", color: "white" }}
+              onClick={handleProceed}
+            >
               Proceed
             </Button>
           </div>
