@@ -2,11 +2,10 @@ import FormatPrice from "../Helpers/FormatPrice";
 import CartAmountToggle from "./CartAmountToggle";
 import { FaTrash } from "react-icons/fa";
 import { useCartContext } from "../context/cart_context";
+import { warningMsg } from "../utils/ToastFunction";
 
 const CartItem = ({ id, name, image, color, price, amount }) => {
   const { removeItem, setDecrease, setIncrement } = useCartContext();
-
-  // console.log(image);
 
   return (
     <div className="cart_heading grid grid-five-column">
@@ -22,7 +21,8 @@ const CartItem = ({ id, name, image, color, price, amount }) => {
             <p>color:</p>
             <div
               className="color-style"
-              style={{ backgroundColor: color, color: color }}></div>
+              style={{ backgroundColor: color, color: color }}
+            ></div>
           </div>
         </div>
       </div>
@@ -48,7 +48,13 @@ const CartItem = ({ id, name, image, color, price, amount }) => {
       </div>
 
       <div>
-        <FaTrash className="remove_icon" onClick={() => removeItem(id)} />
+        <FaTrash
+          className="remove_icon"
+          onClick={() => {
+            removeItem(id);
+            warningMsg("Removed from Cart");
+          }}
+        />
       </div>
     </div>
   );

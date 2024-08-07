@@ -5,6 +5,8 @@ import { API } from "../utils/Constant";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useCartContext } from "./cart_context";
+import { errorMsg, successMsg } from "../utils/ToastFunction";
+import { toast } from "react-toastify";
 
 const UserContext = createContext();
 
@@ -21,15 +23,16 @@ const UserProvider = ({ children }) => {
   const signup = async (values, cb) => {
     try {
       const res = await axios.post(`${API}/users/signup`, values);
-      // console.log(res);
+
       cb();
 
       if (res.status === 200) {
-        alert("Sign Up successful");
+        successMsg("Sign Up successful");
+
         navigate("login");
       }
     } catch (error) {
-      alert("Something went wrong");
+      errorMsg("Something went wrong");
       console.log(error);
     }
   };
@@ -37,21 +40,19 @@ const UserProvider = ({ children }) => {
   const loginUser = async (value) => {
     try {
       const res = await axios.post(`${API}/users/login`, value);
-      console.log(res);
-      if (res.status === 401) {
-        alert("Wrong Password");
-      } else if (res.status === 200) {
-        const decodedUser = jwtDecode(res.data?.accessToken);
-        sessionStorage.setItem("token", res.data?.accessToken);
-        sessionStorage.setItem("user", JSON.stringify(decodedUser));
 
-        alert(res.data.message);
-        navigate("");
-      }
+      successMsg("Logged In");
+      const decodedUser = jwtDecode(res.data?.accessToken);
+      sessionStorage.setItem("token", res.data?.accessToken);
+      sessionStorage.setItem("user", JSON.stringify(decodedUser));
+
+      navigate("");
+      
       console.log(res);
     } catch (error) {
       console.log(error);
-      alert("Something went wrong");
+      errorMsg("Something went wrong");
+    
     }
   };
 

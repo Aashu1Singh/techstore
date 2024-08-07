@@ -5,6 +5,7 @@ import CartAmountToggle from "./CartAmountToggle";
 import { NavLink } from "react-router-dom";
 import { Button } from "../styles/Button";
 import { useCartContext } from "../context/cart_context";
+import { successMsg } from "../utils/ToastFunction";
 
 const AddToCart = ({ product }) => {
   const { addToCart } = useCartContext();
@@ -27,17 +28,23 @@ const AddToCart = ({ product }) => {
       <div className="colors">
         <p>
           Color:
-          {colors && colors.map((curColor, index) => {
-            return (
-              <button
-                key={index}
-                style={{ backgroundColor: curColor }}
-                className={color === curColor ? "btnStyle active" : "btnStyle"}
-                onClick={() => setColor(curColor)}>
-                {color === curColor ? <FaCheck className="checkStyle" /> : null}
-              </button>
-            );
-          })}
+          {colors &&
+            colors.map((curColor, index) => {
+              return (
+                <button
+                  key={index}
+                  style={{ backgroundColor: curColor }}
+                  className={
+                    color === curColor ? "btnStyle active" : "btnStyle"
+                  }
+                  onClick={() => setColor(curColor)}
+                >
+                  {color === curColor ? (
+                    <FaCheck className="checkStyle" />
+                  ) : null}
+                </button>
+              );
+            })}
         </p>
       </div>
 
@@ -48,8 +55,19 @@ const AddToCart = ({ product }) => {
         setIncrease={setIncrease}
       />
 
-      <NavLink to="/cart" onClick={() => addToCart(prod_id, color, amount, product)}>
-        <Button className="btn" style={{backgroundColor : "#25274D", color: "#fff"}}>Add To Cart</Button>
+      <NavLink
+        to="/cart"
+        onClick={() => addToCart(prod_id, color, amount, product)}
+      >
+        <Button
+          className="btn"
+          style={{ backgroundColor: "#25274D", color: "#fff" }}
+          onClick={() => {
+            successMsg("Added to cart");
+          }}
+        >
+          Add To Cart
+        </Button>
       </NavLink>
     </Wrapper>
   );

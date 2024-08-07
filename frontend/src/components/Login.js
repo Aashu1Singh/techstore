@@ -23,7 +23,6 @@ export const Login = (props) => {
               initialValues={{ email: "", password: "" }}
               onSubmit={(values) => {
                 loginUser(values);
-                // console.log(values);
               }}
             >
               {({

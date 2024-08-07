@@ -19,6 +19,9 @@ import ErrorPage from "./ErrorPage";
 import Protected from "./Protected";
 import Profile from "./components/Profile";
 import CheckOut from "./components/CheckOut";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -28,6 +31,18 @@ root.render(
       <FilterContextProvider>
         <CartProvider>
           <UserProvider>
+          <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss= {false}
+        progress={null}
+        draggable={false}
+        pauseOnHover={false}
+      />
             <Routes>
               <Route path="/" element={<App />}>
                 <Route index element={<Home />} />

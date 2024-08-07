@@ -1,5 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 import { GlobalStyle } from "./GlobalStyle";
 import { ThemeProvider } from "styled-components";
@@ -34,6 +36,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      
       <GlobalStyle />
       <Header />
       <Outlet />

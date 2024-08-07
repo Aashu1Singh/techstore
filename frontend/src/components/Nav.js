@@ -7,6 +7,7 @@ import { useCartContext } from "../context/cart_context";
 import { Button } from "../styles/Button";
 import useLogin from "../hooks/useLogin";
 import { useUserContext } from "../context/user_context";
+import { successMsg } from "../utils/ToastFunction";
 
 const Nav = () => {
   const [menuIcon, setMenuIcon] = useState();
@@ -22,6 +23,7 @@ const Nav = () => {
   const logout = () => {
     sessionStorage.clear();
     navigate("");
+    successMsg("User logged out");
   };
   return (
     <Wrapper>

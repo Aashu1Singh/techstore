@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
 import reducer from "../reducer/cartReducer";
+import { successMsg } from "../utils/ToastFunction";
 
 const CartContext = createContext();
 
@@ -47,6 +48,8 @@ const CartProvider = ({ children }) => {
 
   // to clear the cart
   const clearCart = () => {
+
+    successMsg("Cart Cleared");
     dispatch({ type: "CLEAR_CART" });
   };
 
