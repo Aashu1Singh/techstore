@@ -220,19 +220,6 @@ const CheckOut = () => {
 const Wrapper = styled.section`
   padding-top: 10rem;
 
-  textarea {
-    resize: none;
-  }
-
-  input,
-  textarea {
-    text-transform: none;
-    padding: 1.3rem 1rem;
-    border-radius: 0.75rem;
-    margin-top: 1rem;
-    border: 1px solid rgba(153, 152, 156, 0.5);
-  }
-
   .main {
     width: 80vw;
     display: flex;
@@ -262,6 +249,19 @@ const Wrapper = styled.section`
     background-color: rgb(246, 248, 250);
     padding: 4rem 5rem;
     border-radius: 0.85rem;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  input,
+  textarea {
+    text-transform: none;
+    padding: 1.3rem 1rem;
+    border-radius: 0.75rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(153, 152, 156, 0.5);
   }
 
   .grid: {

@@ -6,6 +6,11 @@ export const userReducer = (state, action) => {
         ...state,
         userData: action.payload,
       };
+    case "SET_USER_ORDERS":
+      return {
+        ...state,
+        userOrder: action.payload,
+      };
 
     default:
       return {

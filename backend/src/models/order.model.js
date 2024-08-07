@@ -51,7 +51,23 @@ const saveOrderDetails = async (order) => {
   }
 };
 
+const fetchAllOrders = async (user_id) => {
+  try {
+    const queryString = "SELECT * from orders where customer_id=(?)";
+    const [res] = await connection.query(queryString, [user_id]);
+
+    console.log(res);
+
+    const orders = JSON.parse(JSON.stringify(res));
+
+    return orders;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 module.exports = {
   saveOrder,
   saveOrderDetails,
+  fetchAllOrders,
 };

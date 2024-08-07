@@ -6,12 +6,12 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useCartContext } from "./cart_context";
 import { errorMsg, successMsg } from "../utils/ToastFunction";
-import { toast } from "react-toastify";
 
 const UserContext = createContext();
 
 const initialState = {
   userData: {},
+  userOrder: [],
 };
 
 const UserProvider = ({ children }) => {
@@ -47,12 +47,11 @@ const UserProvider = ({ children }) => {
       sessionStorage.setItem("user", JSON.stringify(decodedUser));
 
       navigate("");
-      
+
       console.log(res);
     } catch (error) {
       console.log(error);
       errorMsg("Something went wrong");
-    
     }
   };
 
@@ -81,7 +80,7 @@ const UserProvider = ({ children }) => {
       });
 
       if (res.status === 200) {
-        navigate("/user/profile");
+        navigate("/user/order");
         clearCart();
       }
       // console.log(res);
@@ -91,9 +90,37 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const getOrders = async () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    let token = sessionStorage.getItem("token");
+
+    try {
+      const res = await axios.get(
+        `${API}/order/get-all-order?userId=${user.user_id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      console.log(res);
+
+      dispatch({ type: "SET_USER_ORDERS", payload: res.data.orders });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ ...state, signup, loginUser, getUserData, checkOutFn }}
+      value={{
+        ...state,
+        signup,
+        loginUser,
+        getUserData,
+        checkOutFn,
+        getOrders,
+      }}
     >
       {children}
     </UserContext.Provider>

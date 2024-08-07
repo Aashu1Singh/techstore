@@ -1,5 +1,8 @@
-const connection = require("../db/db");
-const { saveOrder, saveOrderDetails } = require("../models/order.model");
+const {
+  saveOrder,
+  saveOrderDetails,
+  fetchAllOrders,
+} = require("../models/order.model");
 const { fetchProductsDetails } = require("../models/product.model");
 
 const confirmOrder = async (req, res) => {
@@ -15,18 +18,6 @@ const confirmOrder = async (req, res) => {
   }
 
   try {
-    // let query = "SELECT prod_id, price, name from product where prod_id IN (?)";
-
-    // let value = [...products.map((item) => item.prod_id)];
-
-    // const [result] = await connection.query(query, [value]);
-    // const priceList = JSON.parse(JSON.stringify(result));
-    // // console.log(priceList);
-
-    // const totalPrice = priceList.reduce((agg, curr) => {
-    //   return agg + Number(curr.price);
-    // }, 0);
-
     let orderToProccess = await fetchProductsDetails(products);
     console.log("orderToProccess ", orderToProccess);
 
@@ -81,6 +72,26 @@ const confirmOrder = async (req, res) => {
   }
 };
 
+const getAllOrders = async (req, res) => {
+  
+  const { userId } = req.query;
+
+  const orders = await fetchAllOrders(userId);
+
+  if (!orders) {
+    return res.status(200).json({
+      message: "User doesn't have any order",
+      orders: [],
+    });
+  }
+
+  res.status(200).json({
+    message: "Fetched all orders",
+    orders,
+  });
+};
+
 module.exports = {
   confirmOrder,
+  getAllOrders,
 };
