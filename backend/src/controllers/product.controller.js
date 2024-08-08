@@ -1,15 +1,19 @@
 const connection = require("../db/db");
+const {
+  fetchAllProducts,
+  fetchSingleProduct,
+  findPriceAndQuantityDb,
+  updateProductInfo,
+  uploadAndUpdateProdImage,
+  saveProductInfo,
+  addImagesToProduct,
+} = require("../models/product.model");
 const { uploadMultipleOnCloudinary } = require("../utils/Cloudinary");
 
 const getAllProduct = async (req, res) => {
-  console.log("getAllProduct");
-
   try {
-    const queryString =
-      "Select prod_id, name, price , category, stars, description, stock ,featured, url as image from product left join image on  (product.prod_id = image.id AND image.show = 1 );";
-
-    const [result] = await connection.query(queryString);
-    res.status(200).json(result);
+    const products = await fetchAllProducts();
+    res.status(200).json(products);
   } catch (error) {
     console.log(error);
 
@@ -22,77 +26,41 @@ const getAllProduct = async (req, res) => {
 
 const getSingleProduct = async (req, res) => {
   console.log("get Single product");
-  // console.log();
+
   const { id } = req.params;
+  if (!id) return res.status(400).json({ message: "Product Id is required" });
+  console.log(id);
 
-  const queryString = "SELECT * from product where prod_id = (?)";
-  const value = [id];
+  let responseData = await fetchSingleProduct(id);
 
-  try {
-    const [result] = await connection.query(queryString, value);
-
-    const responseData = JSON.parse(JSON.stringify(result[0]));
-
-    const query = "SELECT * from image WHERE id=(?)";
-    const result2 = await connection.query(query, [id]);
-
-    responseData.image = JSON.parse(JSON.stringify(result2[0]));
-
-    // console.log(responseData);
-    res.status(200).json(responseData);
-  } catch (error) {
-    res.status(400).json({ message: "Internal server error" });
-
-    console.log(error);
+  if (!responseData) {
+    return res.status(400).json({ message: "Product Not Found" });
   }
+  return res.status(200).json(responseData);
 };
-// rgb(7 56 30)
+
 const addSingleProduct = async (req, res) => {
   console.log("addSingleProduct");
 
-  const { name, price, category, stars, description, stock, featured } =
-    req.body;
+  const { body } = req;
 
-  try {
-    let query =
-      "INSERT INTO product ( name, price, category, stars, description, stock, featured) VALUES (?)";
-    let value = [name, price, category, stars, description, stock, featured];
-
-    const [response] = await connection.query(query, [value]);
-
-    const prod_id = JSON.parse(JSON.stringify(response)).insertId;
-
-    // query = 'INS'
-    let localFilePaths = req.files?.images?.map((item) => item.path);
-    console.log(localFilePaths);
-    console.log(req.files);
-
-    if (localFilePaths) {
-      let responseUrls = await uploadMultipleOnCloudinary(localFilePaths);
-      responseUrls.map(async (item, index) => {
-        let queryString1 =
-          "INSERT INTO image (id, url , width, height,filename, size ) VALUES (?);";
-        let values = [
-          Number(prod_id),
-          item.url,
-          item.width,
-          item.height,
-          `${item.original_filename}-${index + 1}`,
-          item.bytes,
-        ];
-        await connection.query(queryString1, [values]);
-      });
-    }
-
-    res
-      .status(200)
-      .json({ statusCode: "200", message: "Product Added succesfully" });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(400)
-      .json({ statusCode: "400", message: "Something went wrong" });
+  const prod_id = await saveProductInfo(body);
+  if (!prod_id) {
+    return res.status(500).json({
+      statusCode: "500",
+      message: "Something went wrong while adding product",
+    });
   }
+
+  let localFilePaths = req.files?.images?.map((item) => item.path);
+
+  if (localFilePaths) {
+    await addImagesToProduct(localFilePaths);
+  }
+
+  res
+    .status(200)
+    .json({ statusCode: "200", message: "Product Added succesfully" });
 };
 
 const updateProduct = async (req, res) => {
@@ -108,29 +76,12 @@ const updateProduct = async (req, res) => {
   }
 
   try {
-    const queryString = `UPDATE product SET ? WHERE prod_id=${prod_id}`;
-
-    let result = await connection.query(queryString, fieldsToUpdate);
+    let update = await updateProductInfo(fieldsToUpdate, prod_id);
 
     let localFilePaths = req.files?.images?.map((item) => item.path);
-    console.log(localFilePaths);
-    console.log(req.files);
 
     if (localFilePaths) {
-      let responseUrls = await uploadMultipleOnCloudinary(localFilePaths);
-      responseUrls.map(async (item, index) => {
-        let queryString1 =
-          "INSERT INTO image (id, url , width, height,filename, size ) VALUES (?);";
-        let values = [
-          Number(prod_id),
-          item.url,
-          item.width,
-          item.height,
-          `${item.original_filename}-${index + 1}`,
-          item.bytes,
-        ];
-        await connection.query(queryString1, [values]);
-      });
+      let uploadImage = await uploadAndUpdateProdImage(localFilePaths);
     }
 
     res
@@ -151,41 +102,19 @@ const calculatePrice = async (req, res) => {
     });
   }
 
-  try {
-    let query = "SELECT prod_id, price, name from product where prod_id IN (?)";
+  const priceList = await findPriceAndQuantityDb(products);
 
-    let value = [...products.map((item) => item.prod_id)];
-
-    const [result] = await connection.query(query, [value]);
-    const priceList = JSON.parse(JSON.stringify(result));
-
-    const responseData = products.map((product) => ({
-      prod_id: product.prod_id,
-      quantity: product.quantity,
-      name: product.name,
-      price: priceList.reduce((accu, curr) => {
-        if (curr.prod_id === product.prod_id) {
-          return Number(curr.price) * Number(product.quantity) + accu;
-        } else {
-          return accu;
-        }
-      }, 0),
-    }));
-    
-    let total = responseData.reduce((accu, curr) => (accu += curr.price), 0);
-
-    res.status(200).json({
-      message: "Total amount to pay",
-      data: responseData,
-      total,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
+  if (!priceList) {
+    return res.status(500).json({
       message: "Some thing went wrong",
     });
   }
 
+  res.status(200).json({
+    message: "Total amount to pay",
+    data: priceList.data,
+    total: priceList.total,
+  });
 };
 
 const fileUpload = async (req, res) => {

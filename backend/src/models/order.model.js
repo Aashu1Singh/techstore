@@ -66,8 +66,26 @@ const fetchAllOrders = async (user_id) => {
     return null;
   }
 };
+
+const cancelOrderId = async (payload) => {
+  const { user_id, order_id } = payload;
+
+  try {
+    const queryString = `UPDATE orders set status="CANCELLED" WHERE order_id=(?) AND customer_id=(?)`;
+
+    const [res] = await connection.query(queryString, [order_id, user_id]);
+    let rowAffected =
+      JSON.parse(JSON.stringify(res)).affectedRows === 1 ? true : false;
+    // console.log(rowAffected);
+    return rowAffected;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 module.exports = {
   saveOrder,
   saveOrderDetails,
   fetchAllOrders,
+  cancelOrderId,
 };

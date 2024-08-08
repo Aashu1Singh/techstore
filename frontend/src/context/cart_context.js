@@ -1,6 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
 import reducer from "../reducer/cartReducer";
-import { successMsg } from "../utils/ToastFunction";
 
 const CartContext = createContext();
 
@@ -11,13 +10,12 @@ const getLocalCartData = () => {
   // } else {
   //   return JSON.parse(localCartData);
   // }
-  const parsedData = JSON.parse(localCartData)
-  if(!Array.isArray(parsedData))  return [];
+  const parsedData = JSON.parse(localCartData);
+  if (!Array.isArray(parsedData)) return [];
   return parsedData;
 };
 
 const initialState = {
-
   cart: getLocalCartData(),
   total_item: "",
   total_price: "",
@@ -48,8 +46,6 @@ const CartProvider = ({ children }) => {
 
   // to clear the cart
   const clearCart = () => {
-
-    successMsg("Cart Cleared");
     dispatch({ type: "CLEAR_CART" });
   };
 
@@ -71,7 +67,8 @@ const CartProvider = ({ children }) => {
         clearCart,
         setDecrease,
         setIncrement,
-      }}>
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

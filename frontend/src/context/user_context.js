@@ -81,12 +81,15 @@ const UserProvider = ({ children }) => {
 
       if (res.status === 200) {
         navigate("/user/order");
+
+        successMsg("Order Placed");
         clearCart();
       }
       // console.log(res);
     } catch (error) {
       console.log(error);
-      alert("Something went wrong");
+
+      errorMsg("Something went wrong");
     }
   };
 
@@ -111,6 +114,29 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const cancelOrder = async (order_id) => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    let token = sessionStorage.getItem("token");
+
+    try {
+      const res = await axios.delete(
+        `${API}/order?user_id=${user.user_id}&order_id=${order_id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      successMsg("Order cancelled");
+      // console.log(res);
+      await getOrders();
+    } catch (error) {
+      errorMsg("Something went wrong");
+      console.log(error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -120,6 +146,7 @@ const UserProvider = ({ children }) => {
         getUserData,
         checkOutFn,
         getOrders,
+        cancelOrder,
       }}
     >
       {children}

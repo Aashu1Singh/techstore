@@ -4,6 +4,8 @@ import { useUserContext } from "../../context/user_context";
 
 const UserProfile = () => {
   const { userData, getUserData } = useUserContext();
+  console.log(userData);
+  
   return (
     <Wrapper>
       {" "}
@@ -13,7 +15,7 @@ const UserProfile = () => {
           alt="Avatar"
         />
 
-        <h2>{userData?.fullname} </h2>
+        <h2>{userData?.fullname?.toUpperCase()} </h2>
       </div>
       <form>
         <div className="row">
