@@ -3,11 +3,13 @@ const {
   saveOrderDetails,
   fetchAllOrders,
   cancelOrderId,
+  generateReceipt,
+  saveReceiptUrl,
 } = require("../models/order.model");
 const { fetchProductsDetails } = require("../models/product.model");
 
 const confirmOrder = async (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
 
   const { products, address } = req.body;
   const { user_id } = req.user;
@@ -46,6 +48,7 @@ const confirmOrder = async (req, res) => {
         products: orderToProccess.responseData,
         orderId,
         user_id,
+        address,
       };
 
       const result = await saveOrderDetails(orderDetails);
@@ -56,9 +59,28 @@ const confirmOrder = async (req, res) => {
         });
       }
 
+      let genReceipt = {
+        products: orderToProccess.responseData,
+        total: orderToProccess.total,
+        orderId,
+        address,
+        shipping: 500,
+      };
+
+      const receipt = await generateReceipt(genReceipt);
+
+      // console.log(receipt);
+
+      if (!receipt) {
+        console.log("Reciept Not generated");
+      } else {
+        await saveReceiptUrl(receipt, orderId);
+      }
+
       return res.status(200).json({
         message: "Order successfull",
         orderId,
+        receipt,
       });
     }
 
@@ -92,10 +114,6 @@ const getAllOrders = async (req, res) => {
 };
 
 const cancelOrder = async (req, res) => {
-  // const { user_id, order_id } = req.query;
-
-  // console.log(req.query);
-
   const cancel = await cancelOrderId(req.query);
 
   if (!cancel) {

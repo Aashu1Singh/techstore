@@ -5,8 +5,12 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button } from "../../styles/Button";
 import Inventory2TwoToneIcon from "@mui/icons-material/Inventory2TwoTone";
+import OrderDetails from "./OrderDetails";
+
+
 const Orders = () => {
-  const { getOrders, userOrder, cancelOrder } = useUserContext();
+  const { getOrders, userOrder , cancelOrder} = useUserContext();
+  console.log(userOrder);
 
   useEffect(() => {
     getOrders();
@@ -37,6 +41,8 @@ const Orders = () => {
         </thead>
         <tbody>
           {userOrder.map((order) => (
+            // <OrderDetails order={order} />
+
             <tr key={order.order_id}>
               <td>{order.order_id}</td>
               <td width="30%">

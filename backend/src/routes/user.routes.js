@@ -4,6 +4,7 @@ const {
   loginUser,
   updateUser,
   getUserDetails,
+  generate,
 } = require("../controllers/user.controller");
 const authenticate = require("../middlewares/authenticate");
 
@@ -17,6 +18,7 @@ userRouter.get("/", (req, res) => {
 
 userRouter.route("/signup").post(addNewUser);
 userRouter.route("/login").post(loginUser);
+userRouter.route("/generate").post(express.raw({type: "*/*"}), generate);
 
 // /secured routes
 

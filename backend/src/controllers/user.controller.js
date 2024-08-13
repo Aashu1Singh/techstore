@@ -1,6 +1,12 @@
 const bcrypt = require("bcrypt");
-const connection = require("../db/db");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+
+const html_to_pdf = require("html-pdf-node");
+const fs = require("fs");
+const ejs = require("ejs");
+
+
 const {
   findUserData,
   saveNewUserData,
@@ -125,8 +131,46 @@ const getUserDetails = async (req, res) => {
   });
 };
 
+
+const generate = async (req, res) => {
+  let receiptHtmlPath = fs.readFileSync(
+    path.join(__dirname, "..", "templates", "Receipt.html"),
+    "utf8"
+  );
+
+  let generatedReceiptPath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "upload",
+    "output.pdf"
+  );
+
+  const html = await ejs.renderFile(
+    path.join(__dirname, "..", "..", "views", "receipt-template.ejs"),
+    { product: order }
+  );
+
+  let options = { format: "A5", path: generatedReceiptPath };
+
+
+  let file = { content: html };
+  await html_to_pdf.generatePdf(file, options)
+
+
+
+  fs.readFile(generatedReceiptPath, (err, data) => {
+    if (err) {
+      return res.status(500).send("Error reading the file.");
+    }
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(data);
+  });
+};
+
 module.exports = {
   addNewUser,
   getUserDetails,
   loginUser,
+  generate,
 };

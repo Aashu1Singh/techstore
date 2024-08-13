@@ -67,7 +67,7 @@ const UserProvider = ({ children }) => {
     });
     // console.log(res);
 
-    dispatch({ type: "SET_USER", payload: res.data.data });
+    dispatch({ type: "SET_USER", payload: res.data.user });
   };
 
   const checkOutFn = async (data) => {

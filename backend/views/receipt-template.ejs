@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        font-size: 1.1rem;
+        justify-content: space-around;
+        gap: 2rem;
+        font-family: "Gill Sans", sans-serif;
+      }
+      table {
+        border: 1px solid rgb(160 160 160);
+        border-collapse: collapse;
+        width: 70vw;
+        font-size: 1.2rem;
+      }
+      thead {
+        background-color: orange;
+      }
+      td {
+        height: 3rem;
+        text-align: center;
+        border: 1px solid rgb(160 160 160);
+      }
+
+      .middle {
+        display: flex;
+        justify-content: center;
+      }
+
+      .heading {
+        text-align: center;
+        background-color: red;
+        color: white;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .heading h1 {
+        margin-bottom: 0;
+      }
+      .heading h5 {
+        margin-top: 0.6rem;
+      }
+
+      .details {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .cdetail {
+        width: 15rem;
+      }
+      .pdetail {
+        width: 15rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .bold {
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="heading">
+      <div>
+        <h1>Tech Store</h1>
+        <h5>Shop Form best</h5>
+      </div>
+      <h2>Payment Receipt</h2>
+      <!-- <hr /> -->
+    </div>
+
+    <div class="details">
+      <div class="cdetail">
+        <div class="bold">Sold To:</div>
+        <hr />
+        <div><%= orderDetails.address %></div>
+      </div>
+      <div class="pdetail">
+        <div>
+          <span class="bold"> Payment Date </span>
+          <hr />
+          <span> 12/12/12 </span>
+        </div>
+        <div>
+          <span class="bold"> Receipt No </span>
+          <hr />
+          <span> <%= orderDetails.orderId %> </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="middle">
+      <table>
+        <thead>
+          <td width="30%">Description</td>
+          <td>Quantity</td>
+          <td>Price</td>
+          <td>Total</td>
+        </thead>
+        <tbody>
+          <% if (orderDetails.products.length > 0) { %> <%
+          orderDetails.products.forEach(item => {%>
+
+          <tr>
+            <td><%= item.name %></td>
+            <td><%= item.quantity %></td>
+            <td>Rs <%= item.price %></td>
+            <td>Rs <%= item.price * item.quantity %></td>
+          </tr>
+
+          <% });%> <% }%>
+
+          <tr>
+            <td rowspan="3" colspan="2" style="text-align: left"></td>
+
+            <td class="bold">Subtotal</td>
+            <td class="bold">Rs <%= orderDetails.total %></td>
+          </tr>
+          <tr>
+            <td class="bold">Shipping</td>
+            <td class="bold">Rs <%= orderDetails.shipping %></td>
+          </tr>
+          <tr>
+            <td class="bold">Total</td>
+            <td class="bold">
+             Rs <%= orderDetails.shipping + orderDetails.total %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

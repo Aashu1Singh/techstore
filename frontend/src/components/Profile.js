@@ -13,7 +13,7 @@ const Profile = () => {
   console.log(activeParams);
 
   useEffect(() => {
-    if (Object.keys(userData).length === 0) {
+    if (userData && Object.keys(userData).length === 0) {
       getUserData();
     }
   }, []);

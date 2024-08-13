@@ -1,8 +1,13 @@
 const connection = require("../db/db");
+const path = require("path");
+
+const html_to_pdf = require("html-pdf-node");
+const fs = require("fs");
+const ejs = require("ejs");
+
+const { uploadSingleOnCloudinary } = require("../utils/Cloudinary");
 
 const saveOrder = async (order) => {
-  // console.log("order", order);
-
   const { user_id, totalPrice, status, address } = order;
 
   try {
@@ -12,7 +17,6 @@ const saveOrder = async (order) => {
 
     const [res] = await connection.query(query, [values]);
     const insertId = JSON.parse(JSON.stringify(res)).insertId;
-    // console.log(result);
 
     return insertId;
   } catch (error) {
@@ -56,7 +60,7 @@ const fetchAllOrders = async (user_id) => {
     const queryString = "SELECT * from orders where customer_id=(?)";
     const [res] = await connection.query(queryString, [user_id]);
 
-    console.log(res);
+    // console.log(res);
 
     const orders = JSON.parse(JSON.stringify(res));
 
@@ -83,9 +87,57 @@ const cancelOrderId = async (payload) => {
     return false;
   }
 };
+
+const generateReceipt = async (orderDetails) => {
+  let receiptTempPlatePath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "views",
+    "receipt-template.ejs"
+  );
+
+  let generatedReceiptPath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "upload",
+    "output.pdf"
+  );
+  let options = { format: "A5", path: generatedReceiptPath };
+
+  try {
+    const html = await ejs.renderFile(receiptTempPlatePath, { orderDetails });
+
+    let file = { content: html };
+
+    await html_to_pdf.generatePdf(file, options);
+
+    const responseUrl = await uploadSingleOnCloudinary(generatedReceiptPath);
+    // console.log(responseUrl);
+
+    return responseUrl.secure_url;
+  } catch (error) {
+    return null;
+  }
+};
+
+const saveReceiptUrl = async (url, order_id) => {
+  try {
+    const query = `UPDATE ORDERS SET receipt_link=(?) WHERE order_id=(?)`;
+
+    connection.query(query, [url, order_id]);
+  } catch (error) {
+    console.log(error);
+
+    console.log("Receipt not saved");
+  }
+};
 module.exports = {
   saveOrder,
   saveOrderDetails,
   fetchAllOrders,
   cancelOrderId,
+  generateReceipt,
+  saveReceiptUrl,
 };

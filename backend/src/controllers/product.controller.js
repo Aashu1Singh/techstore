@@ -1,4 +1,3 @@
-const connection = require("../db/db");
 const {
   fetchAllProducts,
   fetchSingleProduct,

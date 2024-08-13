@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useUserContext } from "../../context/user_context";
 
 const UserProfile = () => {
   const { userData, getUserData } = useUserContext();
+
+  useEffect(() => {
+    
+  
+   getUserData()
+  }, [])
+  
   console.log(userData);
   
   return (
