@@ -3,6 +3,7 @@ import axios from "axios";
 import reducer from "../reducer/productReducer";
 import { API } from "../utils/Constant";
 import { useNavigate } from "react-router-dom";
+import { errorMsg } from "../utils/ToastFunction";
 
 const AppContext = createContext();
 
@@ -32,11 +33,10 @@ const AppProvider = ({ children }) => {
       // console.log(products);
       dispatch({ type: "SET_API_DATA", payload: products });
     } catch (error) {
+      errorMsg("Error fetching Products");
       dispatch({ type: "API_ERROR" });
     }
   };
-
-  // my 2nd api call for single product
 
   const getSingleProduct = async (id) => {
     // console.log(id);
@@ -47,12 +47,13 @@ const AppProvider = ({ children }) => {
       // console.log(singleProduct);
       dispatch({ type: "SET_SINGLE_PRODUCT", payload: singleProduct });
     } catch (error) {
+      errorMsg("Error fetching Product Data");
       dispatch({ type: "SET_SINGLE_ERROR" });
     }
   };
 
   const checkOutPrice = async (items) => {
-    // console.log(items);
+ 
     const payload = items.map((item) => ({
       prod_id: Number(item.id),
       quantity: item.amount,
@@ -77,7 +78,6 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
 
-    // console.log(res);
   };
 
   useEffect(() => {

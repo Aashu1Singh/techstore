@@ -8,17 +8,18 @@ const Sort = () => {
     useFilterContext();
   return (
     <Wrapper className="sort-section">
-      {/* 1st column  */}
       <div className="sorting-list--grid">
         <button
           className={grid_view ? "active sort-btn" : "sort-btn"}
-          onClick={setGridView}>
+          onClick={setGridView}
+        >
           <BsFillGridFill className="icon" />
         </button>
 
         <button
           className={!grid_view ? "active sort-btn" : " sort-btn"}
-          onClick={setListView}>
+          onClick={setListView}
+        >
           <BsList className="icon" />
         </button>
       </div>
@@ -35,7 +36,8 @@ const Sort = () => {
             name="sort"
             id="sort"
             className="sort-selection--style"
-            onClick={sorting}>
+            onClick={sorting}
+          >
             <option value="lowest">Price(lowest)</option>
             <option value="#" disabled></option>
             <option value="highest">Price(highest)</option>
@@ -54,6 +56,10 @@ const Wrapper = styled.section`
   display: flex;
   justify-content: space-between;
   margin-top: 5rem;
+
+  button {
+    border-radius: 0.75rem;
+  }
 
   .sorting-list--grid {
     display: flex;
@@ -80,6 +86,7 @@ const Wrapper = styled.section`
   .sort-selection .sort-selection--style {
     padding: 0.5rem;
     cursor: pointer;
+    border-radius: 0.75rem;
 
     .sort-select--option {
       padding: 0.5rem 0;

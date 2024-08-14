@@ -50,10 +50,6 @@ root.render(
                 <Route path="products" element={<Products />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="user">
-                  {/* <Route
-                    path="profile"
-                    element={<Protected Component={Profile} />}
-                  /> */}
                   <Route
                     path="CheckOut"
                     element={<Protected Component={CheckOut} />}

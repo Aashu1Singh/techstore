@@ -13,7 +13,6 @@ import AddToCart from "./components/AddToCart";
 import { Spin } from "antd";
 import { API } from "./utils/Constant";
 
-
 const SingleProduct = () => {
   const { getSingleProduct, isSingleLoading, singleProduct } =
     useProductContext();
@@ -52,12 +51,10 @@ const SingleProduct = () => {
 
       <Container className="container">
         <div className="grid grid-two-column">
-          {/* product Images  */}
           <div className="product_images">
             <MyImage imgs={image} />
           </div>
 
-          {/* product dAta  */}
           <div className="product-data">
             <h2>{name}</h2>
             <Star stars={stars} reviews={reviews} />
@@ -65,7 +62,7 @@ const SingleProduct = () => {
             <p className="product-data-price">
               MRP:
               <del>
-                <FormatPrice price={price + 250000} />
+                <FormatPrice price={price} />
               </del>
             </p>
             <p className="product-data-price product-data-real-price">
@@ -85,7 +82,7 @@ const SingleProduct = () => {
 
               <div className="product-warranty-data">
                 <TbTruckDelivery className="warranty-icon" />
-                <p> Delivery  </p>
+                <p> Delivery </p>
               </div>
 
               <div className="product-warranty-data">

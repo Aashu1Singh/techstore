@@ -2,7 +2,7 @@ const express = require("express");
 const {
   addNewUser,
   loginUser,
-  updateUser,
+
   getUserDetails,
   generate,
 } = require("../controllers/user.controller");
@@ -18,7 +18,7 @@ userRouter.get("/", (req, res) => {
 
 userRouter.route("/signup").post(addNewUser);
 userRouter.route("/login").post(loginUser);
-userRouter.route("/generate").post(express.raw({type: "*/*"}), generate);
+userRouter.route("/generate").post(express.raw({ type: "*/*" }), generate);
 
 // /secured routes
 

@@ -13,13 +13,17 @@ const HeroSection = ({ myData }) => {
             <p className="intro-data">Welcome to </p>
             <h1> {name} </h1>
             <p>
-            Welcome to TechStore - your ultimate destination for all your electronic needs. Browse our extensive range of products, from smartphones to laptops, gaming consoles, and accessories. With easy navigation and a user-friendly interface, shopping with us has never been easier. Enjoy fast and secure delivery to your doorstep.
+              Welcome to TechStore - your ultimate destination for all your
+              electronic needs. Browse our extensive range of products, from
+              smartphones to laptops, gaming consoles, and accessories. With
+              easy navigation and a user-friendly interface, shopping with us
+              has never been easier. Enjoy fast and secure delivery to your
+              doorstep.
             </p>
             <NavLink to="/products">
               <Button>shop now</Button>
             </NavLink>
           </div>
-          {/* our homepage image  */}
           <div className="hero-section-image">
             <figure>
               <img
@@ -38,13 +42,17 @@ const HeroSection = ({ myData }) => {
 const Wrapper = styled.section`
   padding: 12rem 0;
   padding-bottom: 11%;
-  background-color: #25274D;
+  background-color: #25274d;
 
   img {
     min-width: 10rem;
     height: 10rem;
   }
 
+  Button {
+    background-color: white;
+    color: black;
+  }
   .hero-section-data {
     p {
       margin: 2rem 0;

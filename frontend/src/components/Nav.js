@@ -6,13 +6,11 @@ import { CgMenu, CgClose } from "react-icons/cg";
 import { useCartContext } from "../context/cart_context";
 import { Button } from "../styles/Button";
 import useLogin from "../hooks/useLogin";
-import { useUserContext } from "../context/user_context";
 import { successMsg } from "../utils/ToastFunction";
 
 const Nav = () => {
   const [menuIcon, setMenuIcon] = useState();
   const { total_item } = useCartContext();
-  const { getUserData } = useUserContext();
   const { isAuthenticated, user } = useLogin();
   const navigate = useNavigate();
 
@@ -68,11 +66,7 @@ const Nav = () => {
 
           {isAuthenticated && (
             <li>
-              <NavLink
-                to="/user/profile"
-                className="navbar-link "
-                onClick={() => getUserData()}
-              >
+              <NavLink to="/user/profile" className="navbar-link ">
                 <Button
                   className="button"
                   style={{

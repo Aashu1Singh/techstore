@@ -5,7 +5,12 @@ import { API } from "../utils/Constant";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useCartContext } from "./cart_context";
-import { errorMsg, successMsg } from "../utils/ToastFunction";
+import {
+  errorMsg,
+  loadingMsg,
+  successMsg,
+  updateMsg,
+} from "../utils/ToastFunction";
 
 const UserContext = createContext();
 
@@ -60,18 +65,24 @@ const UserProvider = ({ children }) => {
     let token = sessionStorage.getItem("token");
     let payload = { user_id: user.user_id };
 
-    const res = await axios.post(`${API}/users/getUser`, payload, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    // console.log(res);
+    try {
+      const res = await axios.post(`${API}/users/getUser`, payload, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      // console.log(res);
 
-    dispatch({ type: "SET_USER", payload: res.data.user });
+      dispatch({ type: "SET_USER", payload: res.data.user });
+    } catch (error) {
+      errorMsg("Error is getting User Data");
+      console.log(error);
+    }
   };
 
   const checkOutFn = async (data) => {
     let token = sessionStorage.getItem("token");
+    const toastId = loadingMsg("Order Processing");
     try {
       const res = await axios.post(`${API}/order`, data, {
         headers: {
@@ -80,16 +91,15 @@ const UserProvider = ({ children }) => {
       });
 
       if (res.status === 200) {
+        updateMsg("Order Placed", toastId, "success");
         navigate("/user/order");
 
-        successMsg("Order Placed");
         clearCart();
       }
-      // console.log(res);
     } catch (error) {
       console.log(error);
+      updateMsg("Something went wrong", toastId, "error");
 
-      errorMsg("Something went wrong");
     }
   };
 

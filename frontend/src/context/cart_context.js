@@ -29,8 +29,6 @@ const CartProvider = ({ children }) => {
     dispatch({ type: "ADD_TO_CART", payload: { id, color, amount, product } });
   };
 
-  // increment and decrement the product
-
   const setDecrease = (id) => {
     dispatch({ type: "SET_DECREMENT", payload: id });
   };
@@ -39,18 +37,13 @@ const CartProvider = ({ children }) => {
     dispatch({ type: "SET_INCREMENT", payload: id });
   };
 
-  // to remove the individual item from cart
   const removeItem = (id) => {
     dispatch({ type: "REMOVE_ITEM", payload: id });
   };
 
-  // to clear the cart
   const clearCart = () => {
     dispatch({ type: "CLEAR_CART" });
   };
-
-  // to add the data in localStorage
-  // get vs set
 
   useEffect(() => {
     dispatch({ type: "CART_ITEM_PRICE_TOTAL" });

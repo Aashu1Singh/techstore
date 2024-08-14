@@ -1,22 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useUserContext } from "../context/user_context";
 import UserSideBar from "./user/UserSideBar";
 import { useParams } from "react-router-dom";
 import Orders from "./user/Orders";
 import UserProfile from "./user/UserProfile";
 
 const Profile = () => {
-  const { userData, getUserData } = useUserContext();
-
   const { activeParams } = useParams();
   console.log(activeParams);
-
-  useEffect(() => {
-    if (userData && Object.keys(userData).length === 0) {
-      getUserData();
-    }
-  }, []);
 
   return (
     <Wrapper>

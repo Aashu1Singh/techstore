@@ -81,6 +81,7 @@ const Wrapper = styled.section`
 
   .card {
     border: 0.1rem solid rgb(170 170 170 / 40%);
+    border-radius: 0.75rem;
 
     .card-data {
       padding: 0 2rem;
@@ -104,6 +105,7 @@ const Wrapper = styled.section`
 
       &:hover {
         background-color: rgb(98 84 243);
+        color: white;
       }
 
       &:hover a {

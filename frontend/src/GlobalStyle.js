@@ -21,6 +21,8 @@ body {
   overflow-x: hidden;
    scrollbar-color: rgb(98 84 243);
     scrollbar-width: thin;
+
+    font-family: "Gill Sans", sans-serif;
 }
 
 body::-webkit-scrollbar {
@@ -38,6 +40,9 @@ body::-webkit-scrollbar-thumb {
     border-radius: 9px;
     background-clip: content-box;
 }
+    Button{
+      border-radius: 0.75rem;
+    }
 
 h1,
 h2,
@@ -91,7 +96,6 @@ ${"" /* resuable code section  */}
 
 .grid {
   display: grid;
-  gap: 9rem;
 }
 
 .grid-two-column {
@@ -127,7 +131,6 @@ ${"" /* resuable code section  */}
       position: absolute;
       top: 15%;
       right: 10%;
-      text-transform: uppercase;
       background-color: ${({ theme }) => theme.colors.bg};
       color: ${({ theme }) => theme.colors.helper};
       padding: 0.8rem 2rem;
@@ -135,12 +138,12 @@ ${"" /* resuable code section  */}
       border-radius: 2rem;
     }
 
-input, textarea{
+input, textarea, select{
     max-width: 50rem;
     color: ${({ theme }) => theme.colors.black};
     padding: 1.6rem 2.4rem;
     border: 1px solid ${({ theme }) => theme.colors.border};
-    text-transform: uppercase;
+   border-radius: 0.75rem;
    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
 }
     input[type="submit"]{
@@ -151,7 +154,7 @@ input, textarea{
     padding: 1.4rem 2.2rem;
     border-style: solid;
     border-width: .1rem;
-    text-transform: uppercase;
+     border-radius: 0.75rem;
     font-size: 1.8rem;
     cursor: pointer;
     }

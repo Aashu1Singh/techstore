@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <>
-      {/* <HeroSection myData={data} /> */}
+      <HeroSection myData={data} />
       <FeatureProduct />
       <Services />
       <Trusted />

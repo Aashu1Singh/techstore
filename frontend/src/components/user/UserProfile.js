@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useUserContext } from "../../context/user_context";
+import { Button } from "../../styles/Button";
 
 const UserProfile = () => {
   const { userData, getUserData } = useUserContext();
+  const [disable, setDisable] = useState(true);
 
   useEffect(() => {
-    
-  
-   getUserData()
-  }, [])
-  
+    getUserData();
+  }, []);
+
   console.log(userData);
-  
+
   return (
     <Wrapper>
       {" "}
@@ -24,15 +24,19 @@ const UserProfile = () => {
 
         <h2>{userData?.fullname?.toUpperCase()} </h2>
       </div>
-      <form>
-        <div className="row">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <div className="grid grid-two-column">
           <div className="col">
             <label htmlFor="name"> Name</label>
             <input
               name="name"
               type="text"
               value={userData?.fullname}
-              disabled
+              disabled={disable}
             ></input>
           </div>
           <div className="col">
@@ -45,9 +49,43 @@ const UserProfile = () => {
             ></input>
           </div>
           <div className="col">
-            <label htmlFor="gender"> Gender</label>
-            <input name="gender" type="text"></input>
+            <label htmlFor="phNo"> Contact No </label>
+            <input
+              name="phNo"
+              type="number"
+              value={userData?.email}
+              disabled={disable}
+            ></input>
           </div>
+          <div className="col">
+            <label htmlFor="gender"> Gender</label>
+
+            <select name="Gender" id="gender" disabled={disable}>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+        <div className="form-footer">
+          {disable ? (
+            <Button
+              onClick={() => {
+                setDisable(!disable);
+              }}
+            >
+              {" "}
+              Update{" "}
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                setDisable(!disable);
+              }}
+            >
+              {" "}
+              Save Changes{" "}
+            </Button>
+          )}
         </div>
       </form>
     </Wrapper>
@@ -69,5 +107,17 @@ const Wrapper = styled.section`
     flex-direction: row;
     align-items: center;
     gap: 3rem;
+  }
+
+  .form-footer {
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  select {
+    padding: 11px 3px;
+    margin-top: 1rem;
+    border-radius: 0.75rem;
   }
 `;

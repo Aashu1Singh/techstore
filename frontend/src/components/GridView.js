@@ -7,7 +7,6 @@ const GridView = ({ products }) => {
     <Wrapper className="section">
       <div className="container grid grid-three-column">
         {products.map((curElem, index) => {
-          // console.log(index)
           return <Product key={curElem.prod_id} {...curElem} />;
         })}
       </div>

@@ -22,13 +22,12 @@ const Footer = () => {
             </div>
           </div>
         </section>
-        {/* footer section */}
 
         <footer>
           <div className="container grid grid-four-column">
             <div className="footer-about">
-              <h3>Apna Store</h3>
-              <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. </p>
+              <h3>Tech Store</h3>
+              <p>Shop from best </p>
             </div>
             <div className="footer-subscribe">
               <h3>Subscribe to get important updates</h3>
@@ -75,8 +74,13 @@ const Footer = () => {
 };
 
 const Wrapper = styled.section`
+  gap: 6rem;
   .iSIFGq {
     margin: 0;
+  }
+
+  footer div {
+    gap: 6rem;
   }
 
   .contact-short {

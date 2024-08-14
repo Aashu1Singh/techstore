@@ -25,7 +25,7 @@ const AddToCart = ({ product }) => {
 
   return (
     <Wrapper>
-      <div className="colors">
+      {/* <div className="colors">
         <p>
           Color:
           {colors &&
@@ -46,7 +46,7 @@ const AddToCart = ({ product }) => {
               );
             })}
         </p>
-      </div>
+      </div> */}
 
       {/* add to cart  */}
       <CartAmountToggle
@@ -55,20 +55,16 @@ const AddToCart = ({ product }) => {
         setIncrease={setIncrease}
       />
 
-      <NavLink
-        to="/cart"
-        onClick={() => addToCart(prod_id, color, amount, product)}
+      <Button
+        className="btn"
+        style={{ backgroundColor: "#25274D", color: "#fff" }}
+        onClick={() => {
+          addToCart(prod_id, color, amount, product);
+          successMsg("Added to cart");
+        }}
       >
-        <Button
-          className="btn"
-          style={{ backgroundColor: "#25274D", color: "#fff" }}
-          onClick={() => {
-            successMsg("Added to cart");
-          }}
-        >
-          Add To Cart
-        </Button>
-      </NavLink>
+        Add To Cart
+      </Button>
     </Wrapper>
   );
 };
